@@ -1,4 +1,4 @@
-// components/layout/MainLayout.jsx - кошумча модалдарды кошуу
+// components/layout/MainLayout.jsx
 import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
@@ -6,6 +6,7 @@ import Footer from './Footer'
 import Toast from '../common/Toast'
 import LoginModal from '../modals/LoginModal'
 import RegisterModal from '../modals/RegisterModal'
+import ForgotPasswordModal from '../modals/ForgotPasswordModal'
 import AddProductModal from '../modals/AddProductModal'
 import OrderModal from '../modals/OrderModal'
 import ReviewModal from '../modals/ReviewModal'
@@ -35,6 +36,7 @@ export default function MainLayout() {
   const [activeTab, setActiveTab] = useState('products')
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [showAddProduct, setShowAddProduct] = useState(false)
   const [showAddRequest, setShowAddRequest] = useState(false)
   const [showOrder, setShowOrder] = useState(false)
@@ -70,6 +72,12 @@ export default function MainLayout() {
     paymentMethod: 'Наличные', comment: ''
   })
   const [editUserData, setEditUserData] = useState({})
+  const [forgotPasswordData, setForgotPasswordData] = useState({
+    step: 1,
+    email: '',
+    code: '',
+    verified: false
+  })
 
   const categories = [
     'Жашылча', 'Мөмө', 'Дан', 'Сүт', 'Эт', 'Тоок', 'Жумуртка',
@@ -344,7 +352,6 @@ export default function MainLayout() {
     localStorage.setItem('agrobazar_user', JSON.stringify(userData))
     setShowLogin(false)
     showToastMessage(`Добро пожаловать, ${userData.fullName}!`, 'success')
-    
     setNotifications(prev => [
       {
         id: Date.now(),
@@ -361,12 +368,10 @@ export default function MainLayout() {
     const updatedUsers = [...users, newUser]
     setUsers(updatedUsers)
     localStorage.setItem('agrobazar_users', JSON.stringify(updatedUsers))
-    
     setCurrentUser(newUser)
     localStorage.setItem('agrobazar_user', JSON.stringify(newUser))
     setShowRegister(false)
     showToastMessage(`Регистрация успешна! Добро пожаловать, ${newUser.fullName}!`, 'success')
-    
     setNotifications(prev => [
       {
         id: Date.now(),
@@ -376,6 +381,45 @@ export default function MainLayout() {
       },
       ...prev
     ])
+  }
+
+  const handleForgotPassword = (email) => {
+    const foundUser = users.find(u => u.email === email)
+    if (foundUser) {
+      const code = String(Math.floor(100000 + Math.random() * 900000))
+      setForgotPasswordData({ step: 2, email, code, verified: false })
+      showToastMessage(`Код подтверждения отправлен на ${email}`, 'success')
+      return true
+    } else {
+      showToastMessage('Пользователь с таким email не найден', 'error')
+      return false
+    }
+  }
+
+  const handleVerifyCode = (code) => {
+    if (code === forgotPasswordData.code) {
+      setForgotPasswordData({ ...forgotPasswordData, step: 3, verified: true })
+      showToastMessage('Код подтвержден!', 'success')
+      return true
+    } else {
+      showToastMessage('Неверный код подтверждения', 'error')
+      return false
+    }
+  }
+
+  const handleResetPassword = (email, newPassword) => {
+    const updatedUsers = users.map(u => {
+      if (u.email === email) {
+        return { ...u, password: newPassword }
+      }
+      return u
+    })
+    setUsers(updatedUsers)
+    localStorage.setItem('agrobazar_users', JSON.stringify(updatedUsers))
+    setShowForgotPassword(false)
+    setForgotPasswordData({ step: 1, email: '', code: '', verified: false })
+    showToastMessage('Пароль успешно изменен!', 'success')
+    return true
   }
 
   const value = {
@@ -398,12 +442,12 @@ export default function MainLayout() {
     activeTab, setActiveTab,
     showLogin, setShowLogin,
     showRegister, setShowRegister,
+    showForgotPassword, setShowForgotPassword,
     showAddProduct, setShowAddProduct,
     showAddRequest, setShowAddRequest,
     showOrder, setShowOrder,
     showEditProfile, setShowEditProfile,
     showReviewModal, setShowReviewModal,
-    showNotifications, setShowNotifications,
     currentOrderProduct, setCurrentOrderProduct,
     reviewText, setReviewText,
     reviewRating, setReviewRating,
@@ -414,6 +458,7 @@ export default function MainLayout() {
     newRequest, setNewRequest,
     newOrder, setNewOrder,
     editUserData, setEditUserData,
+    forgotPasswordData, setForgotPasswordData,
     showToastMessage,
     getTimeAgo,
     getCategoryEmoji,
@@ -426,6 +471,9 @@ export default function MainLayout() {
     handleDeleteRequest,
     handleLogin,
     handleRegister,
+    handleForgotPassword,
+    handleVerifyCode,
+    handleResetPassword,
     categories,
     generateInitialProducts
   }
@@ -434,15 +482,16 @@ export default function MainLayout() {
     <AppContext.Provider value={value}>
       <div className="app">
         {showToast && (
-          <Toast 
-            message={toastMessage} 
-            type={toastType} 
-            onClose={() => setShowToast(false)} 
+          <Toast
+            message={toastMessage}
+            type={toastType}
+            onClose={() => setShowToast(false)}
           />
         )}
         <Header />
         <LoginModal />
         <RegisterModal />
+        <ForgotPasswordModal />
         <AddProductModal />
         <OrderModal />
         <ReviewModal />

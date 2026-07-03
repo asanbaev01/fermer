@@ -10,6 +10,7 @@ export function AppProvider({ children }) {
   const [notifications, setNotifications] = useState([])
   const [showLogin, setShowLogin] = useState(false)
   const [showRegister, setShowRegister] = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [showAddProduct, setShowAddProduct] = useState(false)
   const [showEditProfile, setShowEditProfile] = useState(false)
   const [toast, setToast] = useState(null)
@@ -20,15 +21,25 @@ export function AppProvider({ children }) {
   const [comments, setComments] = useState({})
   const [activeTab, setActiveTab] = useState('my-products')
   const [editUserData, setEditUserData] = useState({})
-  const [regions] = useState([
-    'Баткенская область', 'Джалал-Абадская область',
-    'Иссык-Кульская область', 'Нарынская область',
-    'Ошская область', 'Таласская область', 'Чуйская область'
-  ])
-  const [farmTypes] = useState([
-    'Растениеводство', 'Животноводство', 'Птицеводство',
-    'Пчеловодство', 'Садоводство', 'Тепличное хозяйство'
-  ])
+
+  const regions = [
+    'Баткенская область',
+    'Джалал-Абадская область',
+    'Иссык-Кульская область',
+    'Нарынская область',
+    'Ошская область',
+    'Таласская область',
+    'Чуйская область'
+  ]
+
+  const farmTypes = [
+    'Растениеводство',
+    'Животноводство',
+    'Птицеводство',
+    'Пчеловодство',
+    'Садоводство',
+    'Тепличное хозяйство'
+  ]
 
   useEffect(() => {
     const savedUser = localStorage.getItem('agrobazar_user')
@@ -188,6 +199,58 @@ export function AppProvider({ children }) {
     ])
   }
 
+  const handleLogout = () => {
+    setCurrentUser(null)
+    localStorage.removeItem('agrobazar_user')
+    showToastMessage('Вы вышли из системы', 'info')
+  }
+
+  const handleForgotPassword = (email) => {
+    const foundUser = users.find(u => u.email === email)
+    if (foundUser) {
+      const code = String(Math.floor(100000 + Math.random() * 900000))
+      setForgotPasswordData(prev => ({ ...prev, code, email }))
+      showToastMessage(`Код подтверждения отправлен на ${email}`, 'success')
+      return true
+    } else {
+      showToastMessage('Пользователь с таким email не найден', 'error')
+      return false
+    }
+  }
+
+  const handleVerifyCode = (code) => {
+    if (code === forgotPasswordData.code) {
+      setForgotPasswordData(prev => ({ ...prev, step: 3, verified: true }))
+      showToastMessage('Код подтвержден!', 'success')
+      return true
+    } else {
+      showToastMessage('Неверный код подтверждения', 'error')
+      return false
+    }
+  }
+
+  const handleResetPassword = (email, newPassword) => {
+    const updatedUsers = users.map(u => {
+      if (u.email === email) {
+        return { ...u, password: newPassword }
+      }
+      return u
+    })
+    setUsers(updatedUsers)
+    localStorage.setItem('agrobazar_users', JSON.stringify(updatedUsers))
+    setShowForgotPassword(false)
+    setForgotPasswordData({ step: 1, email: '', code: '', verified: false })
+    showToastMessage('Пароль успешно изменен!', 'success')
+    return true
+  }
+
+  const [forgotPasswordData, setForgotPasswordData] = useState({
+    step: 1,
+    email: '',
+    code: '',
+    verified: false
+  })
+
   const formatPrice = (price) => {
     if (price === undefined || price === null) return '0'
     return Number(price).toFixed(1)
@@ -250,6 +313,8 @@ export function AppProvider({ children }) {
     setShowLogin,
     showRegister,
     setShowRegister,
+    showForgotPassword,
+    setShowForgotPassword, // 👈 Мына ушул жерге кошулду, эми LoginModal ичинде ката бербейт
     showAddProduct,
     setShowAddProduct,
     showEditProfile,
@@ -271,9 +336,15 @@ export function AppProvider({ children }) {
     setEditUserData,
     regions,
     farmTypes,
+    forgotPasswordData,
+    setForgotPasswordData,
     showToastMessage,
     handleLogin,
     handleRegister,
+    handleLogout,
+    handleForgotPassword,
+    handleVerifyCode,
+    handleResetPassword,
     formatPrice,
     formatRating,
     getTimeAgo,
@@ -281,7 +352,6 @@ export function AppProvider({ children }) {
     handleDeleteProduct,
     calculateTotalSales
   }
-
   return (
     <AppContext.Provider value={value}>
       {children}

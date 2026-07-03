@@ -1,50 +1,70 @@
-// components/modals/RegisterModal.jsx
 import React, { useContext, useState } from 'react'
+import { FaUser, FaEnvelope, FaLock, FaTimes, FaPhone, FaMapMarkerAlt, FaLeaf } from 'react-icons/fa'
 import { AppContext } from '../../context/AppContext'
-import './Modal.css'
+import './RegisterModal.css'
 
 export default function RegisterModal() {
-  const { 
-    showRegister, 
-    setShowRegister, 
-    setShowLogin, 
-    handleRegister, 
-    showToastMessage 
-  } = useContext(AppContext)
-  
+  const context = useContext(AppContext)
+
+  if (!context) {
+    return null
+  }
+
+  const {
+    showRegister,
+    setShowRegister,
+    setShowLogin,
+    handleRegister,
+    showToastMessage,
+    regions
+  } = context
+
+  const safeRegions = Array.isArray(regions) ? regions : []
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
     phone: '',
     region: '',
-    username: '',
-    role: 'Фермер'
+    farmName: '',
+    avatar: '🌾'
   })
 
+  const avatars = ['🌾', '🍎', '🥕', '🐄', '🐔', '🐝', '🌻', '🍇', '🐑', '🐖', '🐓', '🌿']
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleAvatarSelect = (avatar) => {
+    setFormData(prev => ({ ...prev, [avatar]: avatar }))
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    
+
+    if (formData.password.length < 6) {
+      showToastMessage('Пароль должен быть не менее 6 символов', 'error')
+      return
+    }
+
     const users = JSON.parse(localStorage.getItem('agrobazar_users') || '[]')
     if (users.find(u => u.email === formData.email)) {
-      showToastMessage('Этот email уже зарегистрирован', 'error')
+      showToastMessage('Пользователь с таким email уже существует', 'error')
       return
     }
 
     handleRegister(formData)
-    
     setFormData({
       fullName: '',
       email: '',
       password: '',
       phone: '',
       region: '',
-      username: '',
-      role: 'Фермер'
+      farmName: '',
+      avatar: '🌾'
     })
   }
 
@@ -52,103 +72,108 @@ export default function RegisterModal() {
 
   return (
     <div className="modal-overlay" onClick={() => setShowRegister(false)}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>Регистрация</h2>
-          <button className="modal-close" onClick={() => setShowRegister(false)}>✕</button>
+      <div className="register-modal-container" onClick={(e) => e.stopPropagation()}>
+        <div className="register-modal-header">
+          <h2><FaUser /> Регистрация</h2>
+          <button className="register-modal-close" onClick={() => setShowRegister(false)}>
+            <FaTimes />
+          </button>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Полное имя</label>
-            <input 
+          <div className="register-input-group">
+            <label><FaUser /> ФИО</label>
+            <input
+              type="text"
               name="fullName"
-              type="text" 
-              value={formData.fullName} 
-              onChange={handleChange} 
-              required 
-              placeholder="Иван Иванов"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+              placeholder="Иванов Иван Иванович"
+              autoComplete="name"
             />
           </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input 
+          <div className="register-input-group">
+            <label><FaEnvelope /> Email</label>
+            <input
+              type="email"
               name="email"
-              type="email" 
-              value={formData.email} 
-              onChange={handleChange} 
-              required 
+              value={formData.email}
+              onChange={handleChange}
+              required
               placeholder="example@mail.com"
+              autoComplete="email"
             />
           </div>
-          <div className="form-group">
-            <label>Логин (username)</label>
-            <input 
-              name="username"
-              type="text" 
-              value={formData.username} 
-              onChange={handleChange} 
-              required 
-              placeholder="ivan_agro"
-            />
-          </div>
-          <div className="form-group">
-            <label>Пароль</label>
-            <input 
+          <div className="register-input-group">
+            <label><FaLock /> Пароль</label>
+            <input
+              type="password"
               name="password"
-              type="password" 
-              value={formData.password} 
-              onChange={handleChange} 
-              required 
-              placeholder="••••••••"
-              minLength="6"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              placeholder="Не менее 6 символов"
+              autoComplete="new-password"
             />
           </div>
-          <div className="form-group">
-            <label>Телефон</label>
-            <input 
+          <div className="register-input-group">
+            <label><FaPhone /> Телефон</label>
+            <input
+              type="tel"
               name="phone"
-              type="tel" 
-              value={formData.phone} 
-              onChange={handleChange} 
+              value={formData.phone}
+              onChange={handleChange}
+              required
               placeholder="+996 700 123 456"
+              autoComplete="tel"
             />
           </div>
-          <div className="form-group">
-            <label>Регион</label>
-            <select 
+          <div className="register-input-group">
+            <label><FaMapMarkerAlt /> Область</label>
+            <select
               name="region"
-              value={formData.region} 
+              value={formData.region}
               onChange={handleChange}
               required
             >
-              <option value="">Выберите регион</option>
-              <option value="Чуйская область">Чуйская область</option>
-              <option value="Иссык-Кульская область">Иссык-Кульская область</option>
-              <option value="Нарынская область">Нарынская область</option>
-              <option value="Таласская область">Таласская область</option>
-              <option value="Ошская область">Ошская область</option>
-              <option value="Баткенская область">Баткенская область</option>
-              <option value="Джалал-Абадская область">Джалал-Абадская область</option>
+              <option value="">Выберите область</option>
+              {safeRegions.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
           </div>
-          <div className="form-group">
-            <label>Роль</label>
-            <select 
-              name="role"
-              value={formData.role} 
+          <div className="register-input-group">
+            <label><FaLeaf /> Название фермы</label>
+            <input
+              type="text"
+              name="farmName"
+              value={formData.farmName}
               onChange={handleChange}
-            >
-              <option value="Фермер">Фермер</option>
-              <option value="Сатып алуучу">Сатып алуучу</option>
-            </select>
+              placeholder="Например: Золотая нива"
+            />
           </div>
-          <button type="submit" className="btn-submit">Зарегистрироваться</button>
+          <div className="register-input-group">
+            <label><FaLeaf /> Аватар</label>
+            <div className="register-avatar-grid">
+              {avatars.map(avatar => (
+                <span
+                  key={avatar}
+                  className={`register-avatar-item ${formData.avatar === avatar ? 'active' : ''}`}
+                  onClick={() => handleAvatarSelect(avatar)}
+                >
+                  {avatar}
+                </span>
+              ))}
+            </div>
+          </div>
+          <button type="submit" className="register-submit-btn">
+            <FaUser /> Зарегистрироваться
+          </button>
         </form>
-        <p className="modal-footer-text">
+        <p className="register-footer-text">
           Уже есть аккаунт?{' '}
-          <button 
-            className="link-btn" 
-            onClick={() => { 
+          <button
+            type="button"
+            className="register-switch-btn"
+            onClick={() => {
               setShowRegister(false)
               setShowLogin(true)
             }}
