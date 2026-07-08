@@ -888,3 +888,51 @@
     font-size: 0.85rem;
   }
 }
+/* components/pages/ProductDetail.css */
+
+.btn-cart {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: #0c0a09;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+  flex: 1;
+  justify-content: center;
+}
+
+.btn-cart:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.btn-cart:active {
+  transform: scale(0.96);
+}
+
+.btn-cart svg {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .btn-cart {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-cart {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    flex: 1 1 100%;
+  }
+}

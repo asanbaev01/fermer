@@ -1,4 +1,3 @@
-// components/layout/MainLayout.jsx
 import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
@@ -22,6 +21,18 @@ export default function MainLayout() {
   const [messages, setMessages] = useState({})
   const [comments, setComments] = useState({})
   const [favorites, setFavorites] = useState([])
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('agrobazar_cart')
+    if (savedCart) {
+      try {
+        const parsed = JSON.parse(savedCart)
+        if (Array.isArray(parsed)) return parsed
+      } catch (e) {
+        localStorage.removeItem('agrobazar_cart')
+      }
+    }
+    return []
+  })
   const [notifications, setNotifications] = useState([])
   const [toastMessage, setToastMessage] = useState('')
   const [toastType, setToastType] = useState('')
@@ -237,6 +248,10 @@ export default function MainLayout() {
   }, [favorites])
 
   useEffect(() => {
+    localStorage.setItem('agrobazar_cart', JSON.stringify(cart))
+  }, [cart])
+
+  useEffect(() => {
     if (Object.keys(comments).length > 0) localStorage.setItem('agrobazar_comments', JSON.stringify(comments))
   }, [comments])
 
@@ -311,12 +326,12 @@ export default function MainLayout() {
 
   const formatPrice = (price) => {
     if (price === undefined || price === null) return '0'
-    return price.toFixed(1)
+    return Number(price).toFixed(1)
   }
 
   const formatRating = (rating) => {
     if (rating === undefined || rating === null) return '0'
-    return rating.toFixed(1)
+    return Number(rating).toFixed(1)
   }
 
   const toggleFavorite = (productId) => {
@@ -331,6 +346,47 @@ export default function MainLayout() {
       setFavorites([...favorites, productId])
       showToastMessage('Добавлено в избранное ❤️', 'success')
     }
+  }
+
+  const addToCart = (productId) => {
+    if (!currentUser) {
+      showToastMessage('Сначала войдите в систему', 'info')
+      setShowLogin(true)
+      return
+    }
+    const product = products.find(p => p.id === productId)
+    if (!product) {
+      showToastMessage('Товар не найден', 'error')
+      return
+    }
+    setCart(prev => {
+      const exists = prev.find(item => item.id === productId)
+      if (exists) {
+        return prev.map(item =>
+          item.id === productId ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+        )
+      }
+      return [...prev, { ...product, quantity: 1 }]
+    })
+    showToastMessage('Товар добавлен в корзину! 🛒', 'success')
+  }
+
+  const removeFromCart = (productId) => {
+    setCart(prev => prev.filter(item => item.id !== productId))
+    showToastMessage('Товар удален из корзины', 'info')
+  }
+
+  const clearCart = () => {
+    setCart([])
+    showToastMessage('Корзина очищена', 'info')
+  }
+
+  const getCartTotal = () => {
+    return cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0)
+  }
+
+  const getCartCount = () => {
+    return cart.reduce((sum, item) => sum + (item.quantity || 1), 0)
   }
 
   const handleDeleteProduct = (productId) => {
@@ -431,6 +487,7 @@ export default function MainLayout() {
     messages, setMessages,
     comments, setComments,
     favorites, setFavorites,
+    cart, setCart,
     notifications, setNotifications,
     selectedRegion, setSelectedRegion,
     searchTerm, setSearchTerm,
@@ -448,6 +505,7 @@ export default function MainLayout() {
     showOrder, setShowOrder,
     showEditProfile, setShowEditProfile,
     showReviewModal, setShowReviewModal,
+    showNotifications, setShowNotifications,
     currentOrderProduct, setCurrentOrderProduct,
     reviewText, setReviewText,
     reviewRating, setReviewRating,
@@ -467,6 +525,11 @@ export default function MainLayout() {
     formatPrice,
     formatRating,
     toggleFavorite,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    getCartTotal,
+    getCartCount,
     handleDeleteProduct,
     handleDeleteRequest,
     handleLogin,
@@ -489,12 +552,14 @@ export default function MainLayout() {
           />
         )}
         <Header />
-        <LoginModal />
-        <RegisterModal />
-        <ForgotPasswordModal />
-        <AddProductModal />
-        <OrderModal />
-        <ReviewModal />
+        
+        {showLogin && <LoginModal />}
+        {showRegister && <RegisterModal />}
+        {showForgotPassword && <ForgotPasswordModal />}
+        {showAddProduct && <AddProductModal />}
+        {showOrder && <OrderModal />}
+        {showReviewModal && <ReviewModal />}
+        
         <Outlet />
         <Footer />
       </div>

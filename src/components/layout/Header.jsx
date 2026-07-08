@@ -1,7 +1,11 @@
 // components/layout/Header.jsx
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FaLeaf, FaSearch, FaBell, FaUser, FaPlus, FaSignOutAlt } from 'react-icons/fa'
+import { 
+  FaLeaf, FaSearch, FaBell, FaUser, FaPlus, FaSignOutAlt, 
+  FaHeart, FaShoppingCart, FaTrophy, FaChartBar, FaBox, 
+  FaComment, FaMapMarkerAlt, FaTag, FaNewspaper
+} from 'react-icons/fa'
 import { AppContext } from '../../context/AppContext'
 import './Header.css'
 
@@ -18,7 +22,9 @@ export default function Header() {
     setShowLogin,
     setShowRegister,
     setShowAddProduct,
-    showToastMessage
+    showToastMessage,
+    favorites,
+    cart
   } = useContext(AppContext)
 
   const navigate = useNavigate()
@@ -27,7 +33,6 @@ export default function Header() {
     setCurrentUser(null)
     localStorage.removeItem('agrobazar_user')
     showToastMessage('Вы вышли из системы', 'info')
-    
     setNotifications(prev => [
       {
         id: Date.now(),
@@ -40,7 +45,7 @@ export default function Header() {
   }
 
   const unreadNotifications = notifications.filter(n => !n.read)
-  
+
   const getTimeAgo = (date) => {
     const diff = new Date() - new Date(date)
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
@@ -59,7 +64,7 @@ export default function Header() {
           <FaLeaf className="logo-icon" />
           <h1 className="logo-text">AgroBazar</h1>
         </div>
-        
+
         <div className="header-search">
           <FaSearch className="search-icon" />
           <input
@@ -70,7 +75,7 @@ export default function Header() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className="header-actions">
           <button className="notif-btn" onClick={() => setShowNotifications(!showNotifications)}>
             <FaBell />
@@ -78,11 +83,46 @@ export default function Header() {
               <span className="notif-badge">{unreadNotifications.length}</span>
             )}
           </button>
-          
+
+          <button className="header-icon-btn" onClick={() => navigate('/favorites')}>
+            <FaHeart />
+            {favorites && favorites.length > 0 && (
+              <span className="header-badge">{favorites.length}</span>
+            )}
+          </button>
+
+          <button className="header-icon-btn" onClick={() => navigate('/cart')}>
+            <FaShoppingCart />
+            {cart && cart.length > 0 && (
+              <span className="header-badge">{cart.length}</span>
+            )}
+          </button>
+
           {currentUser ? (
             <div className="user-menu">
               <button className="nav-btn" onClick={() => navigate('/profile')}>
                 <FaUser /> {currentUser.fullName}
+              </button>
+              <button className="nav-btn" onClick={() => navigate('/leaderboard')}>
+                <FaTrophy /> Рейтинг
+              </button>
+              <button className="nav-btn" onClick={() => navigate('/analytics')}>
+                <FaChartBar /> Статистика
+              </button>
+              <button className="nav-btn" onClick={() => navigate('/orders')}>
+                <FaBox /> Заказы
+              </button>
+              <button className="nav-btn" onClick={() => navigate('/chat')}>
+                <FaComment /> Чат
+              </button>
+              <button className="nav-btn" onClick={() => navigate('/map')}>
+                <FaMapMarkerAlt /> Карта
+              </button>
+              <button className="nav-btn" onClick={() => navigate('/discounts')}>
+                <FaTag /> Скидки
+              </button>
+              <button className="nav-btn" onClick={() => navigate('/blog')}>
+                <FaNewspaper /> Блог
               </button>
               <button className="nav-btn" onClick={() => setShowAddProduct(true)}>
                 <FaPlus />
@@ -109,8 +149,8 @@ export default function Header() {
           <div className="notif-header">
             <h3><FaBell /> Уведомления</h3>
             {unreadNotifications.length > 0 && (
-              <button 
-                className="mark-read-btn" 
+              <button
+                className="mark-read-btn"
                 onClick={() => setNotifications(notifications.map(n => ({ ...n, read: true })))}
               >
                 Прочитать все
@@ -121,9 +161,9 @@ export default function Header() {
             <div className="empty-notif">Нет уведомлений</div>
           ) : (
             notifications.map(notif => (
-              <div 
-                key={notif.id} 
-                className={`notif-item ${notif.read ? 'read' : 'unread'}`} 
+              <div
+                key={notif.id}
+                className={`notif-item ${notif.read ? 'read' : 'unread'}`}
                 onClick={() => setNotifications(
                   notifications.map(n => n.id === notif.id ? { ...n, read: true } : n)
                 )}

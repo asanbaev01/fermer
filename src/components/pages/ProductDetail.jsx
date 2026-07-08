@@ -4,8 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import {
   FaArrowLeft, FaUser, FaMapMarkerAlt, FaPhone, FaBox,
   FaStar, FaTruck, FaLeaf, FaShoppingBag, FaHeart,
-  FaComment, FaCalendarAlt, FaTrash, FaEdit, FaWhatsapp,
-  FaTelegram, FaEnvelope
+  FaComment, FaCalendarAlt, FaTrash, FaWhatsapp,
+  FaTelegram, FaShoppingCart
 } from 'react-icons/fa'
 import { BsFillHeartFill, BsHeart } from 'react-icons/bs'
 import { AppContext } from '../../context/AppContext'
@@ -14,13 +14,29 @@ import './ProductDetail.css'
 export default function ProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const context = useContext(AppContext)
+
+  if (!context) {
+    return null
+  }
+
   const {
-    currentUser, products, comments, favorites,
-    setFavorites, setShowOrder, setCurrentOrderProduct,
-    setShowReviewModal, setReviewProductId,
-    handleDeleteProduct, showToastMessage,
-    getTimeAgo, formatPrice, formatRating
-  } = useContext(AppContext)
+    currentUser,
+    products,
+    comments,
+    favorites,
+    setFavorites,
+    setShowOrder,
+    setCurrentOrderProduct,
+    setShowReviewModal,
+    setReviewProductId,
+    handleDeleteProduct,
+    showToastMessage,
+    getTimeAgo,
+    formatPrice,
+    formatRating,
+    addToCart
+  } = context
 
   const [product, setProduct] = useState(null)
 
@@ -32,6 +48,8 @@ export default function ProductDetail() {
       navigate('/')
     }
   }, [id, products, navigate])
+
+  if (!product) return null
 
   const toggleFavorite = () => {
     if (!currentUser) {
@@ -52,11 +70,9 @@ export default function ProductDetail() {
       showToastMessage('Пожалуйста, войдите в систему!', 'error')
       return
     }
-    
     const phone = product.phone.replace(/\s/g, '')
     const message = `Здравствуйте! Меня интересует ваш товар: ${product.name}`
-    
-    switch(method) {
+    switch (method) {
       case 'phone':
         window.location.href = `tel:${phone}`
         break
@@ -66,15 +82,18 @@ export default function ProductDetail() {
       case 'telegram':
         window.open(`https://t.me/${phone}`, '_blank')
         break
-      case 'email':
-        window.location.href = `mailto:${product.email || 'example@email.kg'}?subject=Вопрос о товаре ${product.name}&body=${encodeURIComponent(message)}`
-        break
       default:
         window.location.href = `tel:${phone}`
     }
   }
 
-  if (!product) return null
+  const handleAddToCart = () => {
+    if (!currentUser) {
+      showToastMessage('Пожалуйста, войдите в систему!', 'error')
+      return
+    }
+    addToCart(product.id)
+  }
 
   return (
     <div className="product-detail-page">
@@ -110,6 +129,16 @@ export default function ProductDetail() {
                 {favorites.includes(product.id) ? ' В избранном' : ' В избранное'}
               </button>
             )}
+            <button className="btn-cart" onClick={handleAddToCart}>
+              <FaShoppingCart /> В корзину
+            </button>
+            <button className="btn-order" onClick={() => {
+              if (!currentUser) { showToastMessage('Пожалуйста, войдите в систему!', 'error'); return }
+              setCurrentOrderProduct(product)
+              setShowOrder(true)
+            }}>
+              <FaShoppingBag /> Заказать
+            </button>
             <div className="contact-buttons">
               <button className="btn-contact-phone" onClick={() => handleContact('phone')}>
                 <FaPhone /> Позвонить
@@ -121,13 +150,6 @@ export default function ProductDetail() {
                 <FaTelegram /> Telegram
               </button>
             </div>
-            <button className="btn-order" onClick={() => {
-              if (!currentUser) { showToastMessage('Пожалуйста, войдите в систему!', 'error'); return }
-              setCurrentOrderProduct(product)
-              setShowOrder(true)
-            }}>
-              <FaShoppingBag /> Заказать
-            </button>
             <button className="btn-review" onClick={() => {
               if (!currentUser) { showToastMessage('Пожалуйста, войдите в систему!', 'error'); return }
               setReviewProductId(product.id)

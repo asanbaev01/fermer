@@ -1,5 +1,6 @@
+// components/modals/RegisterModal.jsx
 import React, { useContext, useState } from 'react'
-import { FaUser, FaEnvelope, FaLock, FaTimes, FaPhone, FaMapMarkerAlt, FaLeaf } from 'react-icons/fa'
+import { FaUser, FaEnvelope, FaLock, FaTimes, FaPhone, FaMapMarkerAlt, FaLeaf, FaTag, FaUsers, FaStore, FaTruck, FaBuilding, FaHandshake } from 'react-icons/fa'
 import { AppContext } from '../../context/AppContext'
 import './RegisterModal.css'
 
@@ -19,7 +20,15 @@ export default function RegisterModal() {
     regions
   } = context
 
-  const safeRegions = Array.isArray(regions) ? regions : []
+  const safeRegions = Array.isArray(regions) ? regions : [
+    'Баткенская область',
+    'Джалал-Абадская область',
+    'Иссык-Кульская область',
+    'Нарынская область',
+    'Ошская область',
+    'Таласская область',
+    'Чуйская область'
+  ]
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -28,8 +37,19 @@ export default function RegisterModal() {
     phone: '',
     region: '',
     farmName: '',
-    avatar: '🌾'
+    avatar: '🌾',
+    role: 'Фермер'
   })
+
+  const roles = [
+    { value: 'Фермер', label: 'Фермер', icon: <FaLeaf />, desc: 'Өзүмдүн продукциямды сатам' },
+    { value: 'Сатып алуучу', label: 'Сатып алуучу', icon: <FaStore />, desc: 'Продукция сатып алам' },
+    { value: 'Кооператив', label: 'Кооператив', icon: <FaUsers />, desc: 'Кооперативдин өкүлү' },
+    { value: 'Экспорттоочу', label: 'Экспорттоочу', icon: <FaTruck />, desc: 'Продукцияны экспорттойм' },
+    { value: 'Дистрибьютор', label: 'Дистрибьютор', icon: <FaBuilding />, desc: 'Оптом сатуу менен алектенем' },
+    { value: 'Логистика', label: 'Логистика', icon: <FaTruck />, desc: 'Жеткирүү кызматы' },
+    { value: 'Консультант', label: 'Консультант', icon: <FaHandshake />, desc: 'Айыл чарба кеңешчиси' }
+  ]
 
   const avatars = ['🌾', '🍎', '🥕', '🐄', '🐔', '🐝', '🌻', '🍇', '🐑', '🐖', '🐓', '🌿']
 
@@ -39,7 +59,11 @@ export default function RegisterModal() {
   }
 
   const handleAvatarSelect = (avatar) => {
-    setFormData(prev => ({ ...prev, [avatar]: avatar }))
+    setFormData(prev => ({ ...prev, avatar }))
+  }
+
+  const handleRoleSelect = (role) => {
+    setFormData(prev => ({ ...prev, role }))
   }
 
   const handleSubmit = (e) => {
@@ -64,7 +88,8 @@ export default function RegisterModal() {
       phone: '',
       region: '',
       farmName: '',
-      avatar: '🌾'
+      avatar: '🌾',
+      role: 'Фермер'
     })
   }
 
@@ -114,6 +139,7 @@ export default function RegisterModal() {
               required
               placeholder="Не менее 6 символов"
               autoComplete="new-password"
+              minLength="6"
             />
           </div>
           <div className="register-input-group">
@@ -137,11 +163,32 @@ export default function RegisterModal() {
               required
             >
               <option value="">Выберите область</option>
-              {safeRegions.map(r => <option key={r} value={r}>{r}</option>)}
+              {safeRegions.map((r) => (
+                <option key={r} value={r}>{r}</option>
+              ))}
             </select>
           </div>
+
           <div className="register-input-group">
-            <label><FaLeaf /> Название фермы</label>
+            <label><FaTag /> Роль</label>
+            <div className="register-role-grid">
+              {roles.map((role) => (
+                <button
+                  key={role.value}
+                  type="button"
+                  className={`register-role-item ${formData.role === role.value ? 'active' : ''}`}
+                  onClick={() => handleRoleSelect(role.value)}
+                >
+                  <span className="register-role-icon">{role.icon}</span>
+                  <span className="register-role-label">{role.label}</span>
+                  <span className="register-role-desc">{role.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="register-input-group">
+            <label><FaLeaf /> Название фермы/компании</label>
             <input
               type="text"
               name="farmName"
@@ -153,7 +200,7 @@ export default function RegisterModal() {
           <div className="register-input-group">
             <label><FaLeaf /> Аватар</label>
             <div className="register-avatar-grid">
-              {avatars.map(avatar => (
+              {avatars.map((avatar) => (
                 <span
                   key={avatar}
                   className={`register-avatar-item ${formData.avatar === avatar ? 'active' : ''}`}
