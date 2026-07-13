@@ -726,3 +726,34 @@
   .product-header { flex-direction: column; }
   .product-price { align-self: flex-start; }
 }
+/* Чыгуу баскычынын стили */
+.btn-logout {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: #c82333;
+  transform: scale(1.02);
+}
+
+.btn-logout:active {
+  transform: scale(0.98);
+}
+
+.profile-cover-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}

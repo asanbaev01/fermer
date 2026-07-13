@@ -6,7 +6,8 @@ import {
   FaComment, FaStar, FaMapMarkerAlt, FaTag,
   FaPhone, FaEnvelope, FaTrophy, FaGraduationCap,
   FaCalendarAlt, FaClock, FaTrash, FaPlus, FaLeaf, FaCheckCircle,
-  FaCamera, FaLink, FaWhatsapp, FaTelegram, FaGlobe
+  FaCamera, FaLink, FaWhatsapp, FaTelegram, FaGlobe,
+  FaSignOutAlt  // <--- Чыгуу иконасы кошулду
 } from 'react-icons/fa'
 import { MdAgriculture } from 'react-icons/md'
 import { AppContext } from '../../context/AppContext'
@@ -41,7 +42,8 @@ export default function ProfilePage() {
     formatPrice,
     formatRating,
     getTimeAgo,
-    calculateTotalSales
+    calculateTotalSales,
+    logout  // <--- logout функциясы кошулду
   } = context
 
   useEffect(() => {
@@ -63,6 +65,14 @@ export default function ProfilePage() {
   const userFavorites = products.filter(p => favorites.includes(p.id))
   const userComments = Object.values(comments).flat().filter(c => c.userId === currentUser.id)
   const totalSales = calculateTotalSales ? calculateTotalSales(currentUser.id) : 0
+
+  // Чыгуу функциясы
+  const handleLogout = () => {
+    if (window.confirm('Чын эле профилден чыккыңыз келеби?')) {
+      logout()
+      navigate('/')
+    }
+  }
 
   return (
     <div className="profile-page">
@@ -92,6 +102,10 @@ export default function ProfilePage() {
             </button>
             <button className="btn-share-profile" onClick={() => navigator.clipboard.writeText(window.location.href)}>
               <FaLink /> Поделиться
+            </button>
+            {/* ⬇️ ЧЫГУУ БАСКЫЧЫ КОШУЛДУ */}
+            <button className="btn-logout" onClick={handleLogout}>
+              <FaSignOutAlt /> Выйти
             </button>
           </div>
         </div>

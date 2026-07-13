@@ -9,6 +9,7 @@ import ForgotPasswordModal from '../modals/ForgotPasswordModal'
 import AddProductModal from '../modals/AddProductModal'
 import OrderModal from '../modals/OrderModal'
 import ReviewModal from '../modals/ReviewModal'
+import InstallPrompt from '../common/InstallPrompt'
 import { AppContext } from '../../context/AppContext'
 import './MainLayout.css'
 
@@ -541,7 +542,7 @@ export default function MainLayout() {
     generateInitialProducts
   }
 
-  return (
+return (
     <AppContext.Provider value={value}>
       <div className="app">
         {showToast && (
@@ -560,7 +561,12 @@ export default function MainLayout() {
         {showOrder && <OrderModal />}
         {showReviewModal && <ReviewModal />}
         
-        <Outlet />
+        <InstallPrompt />
+        
+        <main className="main-content">
+          <Outlet />
+        </main>
+        
         <Footer />
       </div>
     </AppContext.Provider>

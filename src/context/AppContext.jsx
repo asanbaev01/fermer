@@ -30,6 +30,10 @@ export function AppProvider({ children }) {
   const [showReviewModal, setShowReviewModal] = useState(false)
   const [reviewProductId, setReviewProductId] = useState(null)
   const [toast, setToast] = useState(null)
+  const [language, setLanguage] = useState(() => {
+    const saved = localStorage.getItem('agrobazar_language')
+    return saved || 'ru'
+  })
 
   const [users, setUsers] = useState(() => {
     const saved = localStorage.getItem('agrobazar_users')
@@ -203,6 +207,10 @@ export function AppProvider({ children }) {
       localStorage.setItem('agrobazar_chat_messages', JSON.stringify(messages))
     }
   }, [messages])
+
+  useEffect(() => {
+    localStorage.setItem('agrobazar_language', language)
+  }, [language])
 
   const showToastMessage = (message, type = 'success') => {
     setToast({ message, type })
@@ -472,6 +480,8 @@ export function AppProvider({ children }) {
     farmTypes,
     forgotPasswordData,
     setForgotPasswordData,
+    language,
+    setLanguage,
     showToastMessage,
     handleLogin,
     handleRegister,

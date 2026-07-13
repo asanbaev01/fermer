@@ -1,13 +1,28 @@
-// components/layout/Header.jsx
-import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { 
-  FaLeaf, FaSearch, FaBell, FaUser, FaPlus, FaSignOutAlt, 
-  FaHeart, FaShoppingCart, FaTrophy, FaChartBar, FaBox, 
-  FaComment, FaMapMarkerAlt, FaTag, FaNewspaper
-} from 'react-icons/fa'
-import { AppContext } from '../../context/AppContext'
-import './Header.css'
+import React, { useContext, useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  FaLeaf,
+  FaSearch,
+  FaBell,
+  FaUser,
+  FaPlus,
+  FaSignOutAlt,
+  FaHeart,
+  FaShoppingCart,
+  FaTrophy,
+  FaChartBar,
+  FaBox,
+  FaComment,
+  FaMapMarkerAlt,
+  FaTag,
+  FaGlobe,
+  FaSun,
+  FaMoon,
+  FaBars,
+  FaTimes,
+} from 'react-icons/fa';
+import { AppContext } from '../../context/AppContext';
+import './Header.css';
 
 export default function Header() {
   const {
@@ -24,149 +39,327 @@ export default function Header() {
     setShowAddProduct,
     showToastMessage,
     favorites,
-    cart
-  } = useContext(AppContext)
+    cart,
+    language,
+    setLanguage,
+  } = useContext(AppContext);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+  const langMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const notifRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
+        setShowLangMenu(false);
+      }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setShowMobileMenu(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [setShowNotifications]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
-    setCurrentUser(null)
-    localStorage.removeItem('agrobazar_user')
-    showToastMessage('Вы вышли из системы', 'info')
-    setNotifications(prev => [
+    setCurrentUser(null);
+    localStorage.removeItem('agrobazar_user');
+    showToastMessage('Вы вышли из системы', 'info');
+    setNotifications((prev) => [
       {
         id: Date.now(),
         message: 'Вы вышли из системы',
         read: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       },
-      ...prev
-    ])
-  }
+      ...prev,
+    ]);
+    setShowMobileMenu(false);
+  };
 
-  const unreadNotifications = notifications.filter(n => !n.read)
+  const unreadNotifications = notifications.filter((n) => !n.read);
 
   const getTimeAgo = (date) => {
-    const diff = new Date() - new Date(date)
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    if (days === 0) return 'сегодня'
-    if (days === 1) return 'вчера'
-    if (days < 7) return `${days} дня назад`
-    if (days < 30) return `${Math.floor(days / 7)} недель назад`
-    if (days < 365) return `${Math.floor(days / 30)} месяцев назад`
-    return `${Math.floor(days / 365)} лет назад`
-  }
+    const diff = new Date() - new Date(date);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    if (days === 0) return 'сегодня';
+    if (days === 1) return 'вчера';
+    if (days < 7) return `${days} дня назад`;
+    if (days < 30) return `${Math.floor(days / 7)} недель назад`;
+    if (days < 365) return `${Math.floor(days / 30)} месяцев назад`;
+    return `${Math.floor(days / 365)} лет назад`;
+  };
+
+  const languages = [
+    { code: 'ky', label: 'Кыргызча', flag: '🇰🇬' },
+    { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+  ];
+
+  const handleLanguageChange = (langCode) => {
+    setLanguage(langCode);
+    setShowLangMenu(false);
+    showToastMessage(
+      `Язык изменен на ${languages.find((l) => l.code === langCode)?.label}`,
+      'success'
+    );
+  };
+
+  const getCurrentLangLabel = () => {
+    const lang = languages.find((l) => l.code === language);
+    return lang ? `${lang.flag} ${lang.label}` : '🇷🇺 Русский';
+  };
+
+  const topNavItems = [
+    {
+      icon: FaHeart,
+      label: 'Избранное',
+      path: '/favorites',
+      badge: favorites?.length || 0,
+    },
+    {
+      icon: FaShoppingCart,
+      label: 'Корзина',
+      path: '/cart',
+      badge: cart?.length || 0,
+    },
+    {
+      icon: FaBell,
+      label: 'Уведомления',
+      path: null,
+      badge: unreadNotifications.length,
+      isNotif: true,
+    },
+  ];
+
+  const bottomNavItems = [
+    { icon: FaTrophy, label: 'Рейтинг', path: '/leaderboard' },
+    { icon: FaChartBar, label: 'Статистика', path: '/analytics' },
+    { icon: FaBox, label: 'Заказы', path: '/orders' },
+    { icon: FaComment, label: 'Чат', path: '/chat' },
+    { icon: FaMapMarkerAlt, label: 'Карта', path: '/map' },
+    { icon: FaTag, label: 'Скидки', path: '/discounts' },
+  ];
 
   return (
-    <header className="header">
-      <div className="header-content">
-        <div className="logo-section" onClick={() => navigate('/')}>
-          <FaLeaf className="logo-icon" />
-          <h1 className="logo-text">AgroBazar</h1>
+    <header className={`header ${scrolled ? 'header-scrolled' : ''}`}>
+      <div className="header-container">
+        {/* 1-катар: Лого + Издөө + Тил/Тема/Меню */}
+        <div className="header-row header-row-top">
+          <div className="logo-wrapper" onClick={() => navigate('/')}>
+            <div className="logo-icon-wrap">
+              <FaLeaf className="logo-icon" />
+            </div>
+            <div className="logo-text-wrap">
+              <h1 className="logo-main">AgroBazar</h1>
+              <span className="logo-sub">АЙЫЛ ЧАРБА МАРКЕТПЛЕЙС</span>
+            </div>
+          </div>
+
+          <div className="search-wrapper">
+            <div className="search-box">
+              <FaSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="Товар, фермер, регион..."
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button className="search-clear" onClick={() => setSearchTerm('')}>
+                  <FaTimes />
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="top-actions">
+            <div className="lang-wrapper" ref={langMenuRef}>
+              <button
+                className="lang-btn"
+                onClick={() => setShowLangMenu(!showLangMenu)}
+              >
+                <FaGlobe />
+                <span className="lang-label">{getCurrentLangLabel()}</span>
+              </button>
+              {showLangMenu && (
+                <div className="lang-dropdown">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      className={`lang-option ${
+                        language === lang.code ? 'active' : ''
+                      }`}
+                      onClick={() => handleLanguageChange(lang.code)}
+                    >
+                      <span className="lang-flag">{lang.flag}</span>
+                      <span>{lang.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <button
+              className="theme-btn"
+              onClick={() => setIsDark(!isDark)}
+              aria-label="Тема"
+            >
+              {isDark ? <FaSun /> : <FaMoon />}
+            </button>
+
+            <button
+              className="mobile-toggle"
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              aria-label="Меню"
+            >
+              {showMobileMenu ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
         </div>
 
-        <div className="header-search">
-          <FaSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder="Товар, фермер, регион..."
-            className="search-input"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
-        <div className="header-actions">
-          <button className="notif-btn" onClick={() => setShowNotifications(!showNotifications)}>
-            <FaBell />
-            {unreadNotifications.length > 0 && (
-              <span className="notif-badge">{unreadNotifications.length}</span>
-            )}
-          </button>
-
-          <button className="header-icon-btn" onClick={() => navigate('/favorites')}>
-            <FaHeart />
-            {favorites && favorites.length > 0 && (
-              <span className="header-badge">{favorites.length}</span>
-            )}
-          </button>
-
-          <button className="header-icon-btn" onClick={() => navigate('/cart')}>
-            <FaShoppingCart />
-            {cart && cart.length > 0 && (
-              <span className="header-badge">{cart.length}</span>
-            )}
-          </button>
-
-          {currentUser ? (
-            <div className="user-menu">
-              <button className="nav-btn" onClick={() => navigate('/profile')}>
-                <FaUser /> {currentUser.fullName}
-              </button>
-              <button className="nav-btn" onClick={() => navigate('/leaderboard')}>
-                <FaTrophy /> Рейтинг
-              </button>
-              <button className="nav-btn" onClick={() => navigate('/analytics')}>
-                <FaChartBar /> Статистика
-              </button>
-              <button className="nav-btn" onClick={() => navigate('/orders')}>
-                <FaBox /> Заказы
-              </button>
-              <button className="nav-btn" onClick={() => navigate('/chat')}>
-                <FaComment /> Чат
-              </button>
-              <button className="nav-btn" onClick={() => navigate('/map')}>
-                <FaMapMarkerAlt /> Карта
-              </button>
-              <button className="nav-btn" onClick={() => navigate('/discounts')}>
-                <FaTag /> Скидки
-              </button>
-              <button className="nav-btn" onClick={() => navigate('/blog')}>
-                <FaNewspaper /> Блог
-              </button>
-              <button className="nav-btn" onClick={() => setShowAddProduct(true)}>
-                <FaPlus />
-              </button>
-              <button className="nav-btn logout-btn" onClick={handleLogout}>
-                <FaSignOutAlt />
-              </button>
+        {/* 2-катар: Баардык навигация */}
+        <div className="header-row header-row-bottom">
+          <div className="nav-wrapper">
+            <div className="nav-left">
+              {topNavItems.map((item, index) => (
+                <button
+                  key={index}
+                  className={`nav-btn ${item.isNotif ? 'notif-btn' : ''}`}
+                  onClick={() => {
+                    if (item.isNotif) {
+                      setShowNotifications(!showNotifications);
+                    } else {
+                      navigate(item.path);
+                    }
+                  }}
+                  aria-label={item.label}
+                >
+                  <item.icon />
+                  <span>{item.label}</span>
+                  {item.badge > 0 && (
+                    <span className="nav-badge">{item.badge}</span>
+                  )}
+                </button>
+              ))}
             </div>
-          ) : (
-            <div className="auth-buttons">
-              <button className="btn-login" onClick={() => setShowLogin(true)}>
-                <FaUser /> Войти
-              </button>
-              <button className="btn-register" onClick={() => setShowRegister(true)}>
-                <FaLeaf /> Регистрация
-              </button>
+
+            <div className="nav-center">
+              {bottomNavItems.map((item, index) => (
+                <button
+                  key={index}
+                  className="nav-btn"
+                  onClick={() => navigate(item.path)}
+                >
+                  <item.icon />
+                  <span>{item.label}</span>
+                </button>
+              ))}
             </div>
-          )}
+
+            <div className="nav-right">
+              {currentUser ? (
+                <>
+                  <button
+                    className="nav-btn add-btn"
+                    onClick={() => setShowAddProduct(true)}
+                  >
+                    <FaPlus />
+                    <span>Добавить</span>
+                  </button>
+                  <button
+                    className="nav-btn user-btn"
+                    onClick={() => navigate('/profile')}
+                  >
+                    <div className="user-avatar-sm">
+                      {currentUser.fullName?.charAt(0) || 'U'}
+                    </div>
+                    <span>{currentUser.fullName}</span>
+                  </button>
+                  <button
+                    className="nav-btn logout-btn"
+                    onClick={handleLogout}
+                  >
+                    <FaSignOutAlt />
+                    <span>Выйти</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="nav-btn login-btn"
+                    onClick={() => setShowLogin(true)}
+                  >
+                    <FaUser />
+                    <span>Войти</span>
+                  </button>
+                  <button
+                    className="nav-btn register-btn"
+                    onClick={() => setShowRegister(true)}
+                  >
+                    <FaLeaf />
+                    <span>Регистрация</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
       {showNotifications && (
-        <div className="notifications-dropdown">
+        <div className="notifications-dropdown" ref={notifRef}>
           <div className="notif-header">
-            <h3><FaBell /> Уведомления</h3>
+            <h3>
+              <FaBell /> Уведомления
+            </h3>
             {unreadNotifications.length > 0 && (
               <button
                 className="mark-read-btn"
-                onClick={() => setNotifications(notifications.map(n => ({ ...n, read: true })))}
+                onClick={() =>
+                  setNotifications(
+                    notifications.map((n) => ({ ...n, read: true }))
+                  )
+                }
               >
                 Прочитать все
               </button>
             )}
           </div>
           {notifications.length === 0 ? (
-            <div className="empty-notif">Нет уведомлений</div>
+            <div className="empty-notif">
+              <FaBell className="empty-icon" />
+              <p>Нет уведомлений</p>
+            </div>
           ) : (
-            notifications.map(notif => (
+            notifications.map((notif) => (
               <div
                 key={notif.id}
                 className={`notif-item ${notif.read ? 'read' : 'unread'}`}
-                onClick={() => setNotifications(
-                  notifications.map(n => n.id === notif.id ? { ...n, read: true } : n)
-                )}
+                onClick={() =>
+                  setNotifications(
+                    notifications.map((n) =>
+                      n.id === notif.id ? { ...n, read: true } : n
+                    )
+                  )
+                }
               >
                 <div className="notif-message">{notif.message}</div>
                 <div className="notif-time">{getTimeAgo(notif.createdAt)}</div>
@@ -175,6 +368,113 @@ export default function Header() {
           )}
         </div>
       )}
+
+      {showMobileMenu && (
+        <div className="mobile-menu" ref={mobileMenuRef}>
+          <div className="mobile-menu-header">
+            {currentUser ? (
+              <div className="mobile-user-info">
+                <div className="mobile-user-avatar">
+                  {currentUser.fullName?.charAt(0) || 'U'}
+                </div>
+                <div>
+                  <div className="mobile-user-name">{currentUser.fullName}</div>
+                  <div className="mobile-user-email">{currentUser.email}</div>
+                </div>
+              </div>
+            ) : (
+              <div className="mobile-auth-buttons">
+                <button
+                  className="mobile-login-btn"
+                  onClick={() => {
+                    setShowLogin(true);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <FaUser /> Войти
+                </button>
+                <button
+                  className="mobile-register-btn"
+                  onClick={() => {
+                    setShowRegister(true);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <FaLeaf /> Регистрация
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="mobile-menu-body">
+            <div className="mobile-menu-section">
+              <div className="mobile-section-title">Основное</div>
+              {topNavItems.map((item, index) => (
+                <button
+                  key={index}
+                  className="mobile-nav-link"
+                  onClick={() => {
+                    if (item.isNotif) {
+                      setShowNotifications(!showNotifications);
+                    } else {
+                      navigate(item.path);
+                    }
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <item.icon />
+                  <span>{item.label}</span>
+                  {item.badge > 0 && (
+                    <span className="mobile-badge">{item.badge}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            <div className="mobile-menu-section">
+              <div className="mobile-section-title">Навигация</div>
+              {bottomNavItems.map((item, index) => (
+                <button
+                  key={index}
+                  className="mobile-nav-link"
+                  onClick={() => {
+                    navigate(item.path);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <item.icon />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="mobile-menu-section">
+              <div className="mobile-section-title">Действия</div>
+              {currentUser && (
+                <button
+                  className="mobile-nav-link add-mobile-btn"
+                  onClick={() => {
+                    setShowAddProduct(true);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <FaPlus />
+                  <span>Добавить товар</span>
+                </button>
+              )}
+              {currentUser && (
+                <button
+                  className="mobile-nav-link logout-mobile-btn"
+                  onClick={handleLogout}
+                >
+                  <FaSignOutAlt />
+                  <span>Выйти</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
-  )
+  );
 }

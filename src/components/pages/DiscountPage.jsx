@@ -10,7 +10,7 @@ import './DiscountPage.css'
 
 export default function DiscountPage() {
   const navigate = useNavigate()
-  const { products, currentUser, showToastMessage, addToCart } = useContext(AppContext)
+  const { products, currentUser, showToastMessage, addToCart, language } = useContext(AppContext)
   const [copiedCode, setCopiedCode] = useState(null)
   const [activeTab, setActiveTab] = useState('all')
   const [usedCodes, setUsedCodes] = useState([])
@@ -30,6 +30,83 @@ export default function DiscountPage() {
     localStorage.setItem('agrobazar_used_codes', JSON.stringify(usedCodes))
   }, [usedCodes])
 
+  const translations = {
+    ky: {
+      title: 'Арзандатуулар жана акциялар',
+      back: 'Артка',
+      all: 'Бардык арзандатуулар',
+      available: 'Жеткиликтүү',
+      used: 'Колдонулган',
+      total: 'Бардык арзандатуулар',
+      availableCount: 'Жеткиликтүү',
+      productsOnSale: 'Арзандатылган товарлар',
+      noProducts: 'Арзандатылган товарлар жок',
+      copy: 'Көчүрүү',
+      copied: 'Көчүрүлдү',
+      activate: 'Активациялоо',
+      usedText: 'Колдонулган',
+      discount: 'Арзандатуу',
+      promo: 'Промокод',
+      minOrder: 'Минималдуу заказ',
+      days: 'күн',
+      week: 'жума',
+      month: 'ай',
+      lastDay: 'Акыркы күн!',
+      expired: 'Бүткөн',
+      addToCart: 'Себетке'
+    },
+    ru: {
+      title: 'Скидки и акции',
+      back: 'Назад',
+      all: 'Все скидки',
+      available: 'Доступные',
+      used: 'Использованные',
+      total: 'Всего скидок',
+      availableCount: 'Доступно',
+      productsOnSale: 'Товары со скидкой',
+      noProducts: 'Товаров со скидкой пока нет',
+      copy: 'Копировать',
+      copied: 'Скопирован',
+      activate: 'Активировать',
+      usedText: 'Использован',
+      discount: 'Скидка',
+      promo: 'Промокод',
+      minOrder: 'Мин. заказ',
+      days: 'дней',
+      week: 'недель',
+      month: 'месяцев',
+      lastDay: 'Последний день!',
+      expired: 'Истек',
+      addToCart: 'В корзину'
+    },
+    en: {
+      title: 'Discounts and Promotions',
+      back: 'Back',
+      all: 'All Discounts',
+      available: 'Available',
+      used: 'Used',
+      total: 'Total Discounts',
+      availableCount: 'Available',
+      productsOnSale: 'Products on Sale',
+      noProducts: 'No products on sale yet',
+      copy: 'Copy',
+      copied: 'Copied',
+      activate: 'Activate',
+      usedText: 'Used',
+      discount: 'Discount',
+      promo: 'Promo Code',
+      minOrder: 'Min. Order',
+      days: 'days',
+      week: 'weeks',
+      month: 'months',
+      lastDay: 'Last day!',
+      expired: 'Expired',
+      addToCart: 'Add to Cart'
+    }
+  }
+
+  const t = translations[language] || translations.ru
+
   const promoCodes = [
     {
       id: 1,
@@ -40,7 +117,11 @@ export default function DiscountPage() {
       minOrder: 500,
       maxDiscount: 1000,
       expires: '2026-12-31',
-      description: '10% скидка на все товары',
+      description: {
+        ky: 'Бардык товарларга 10% арзандатуу',
+        ru: '10% скидка на все товары',
+        en: '10% discount on all products'
+      },
       icon: '🔥',
       color: '#ef4444'
     },
@@ -53,7 +134,11 @@ export default function DiscountPage() {
       minOrder: 1000,
       maxDiscount: 2000,
       expires: '2026-08-31',
-      description: '25% скидка на овощи',
+      description: {
+        ky: 'Жашылчага 25% арзандатуу',
+        ru: '25% скидка на овощи',
+        en: '25% discount on vegetables'
+      },
       icon: '🌿',
       color: '#22c55e'
     },
@@ -66,7 +151,11 @@ export default function DiscountPage() {
       minOrder: 300,
       maxDiscount: 800,
       expires: '2026-09-30',
-      description: '15% скидка на фрукты',
+      description: {
+        ky: 'Мөмөгө 15% арзандатуу',
+        ru: '15% скидка на фрукты',
+        en: '15% discount on fruits'
+      },
       icon: '🍎',
       color: '#ef4444'
     },
@@ -79,7 +168,11 @@ export default function DiscountPage() {
       minOrder: 200,
       maxDiscount: 500,
       expires: '2026-12-31',
-      description: '20% скидка на мед',
+      description: {
+        ky: 'Балга 20% арзандатуу',
+        ru: '20% скидка на мед',
+        en: '20% discount on honey'
+      },
       icon: '🍯',
       color: '#f59e0b'
     },
@@ -92,7 +185,11 @@ export default function DiscountPage() {
       minOrder: 3000,
       maxDiscount: 500,
       expires: '2026-07-31',
-      description: '500 сом скидка при заказе от 3000 сом',
+      description: {
+        ky: '3000 сомдон баштап 500 сом арзандатуу',
+        ru: '500 сом скидка при заказе от 3000 сом',
+        en: '500 som discount on orders over 3000 som'
+      },
       icon: '💎',
       color: '#8b5cf6'
     },
@@ -105,7 +202,11 @@ export default function DiscountPage() {
       minOrder: 1500,
       maxDiscount: 3000,
       expires: '2026-10-31',
-      description: '30% скидка на мясо',
+      description: {
+        ky: 'Этке 30% арзандатуу',
+        ru: '30% скидка на мясо',
+        en: '30% discount on meat'
+      },
       icon: '🥩',
       color: '#dc2626'
     },
@@ -118,7 +219,11 @@ export default function DiscountPage() {
       minOrder: 200,
       maxDiscount: 300,
       expires: '2026-12-31',
-      description: '10% скидка на молочные продукты',
+      description: {
+        ky: 'Сүт азыктарына 10% арзандатуу',
+        ru: '10% скидка на молочные продукты',
+        en: '10% discount on dairy products'
+      },
       icon: '🥛',
       color: '#3b82f6'
     },
@@ -131,7 +236,11 @@ export default function DiscountPage() {
       minOrder: 500,
       maxDiscount: 50,
       expires: '2026-12-31',
-      description: '50 сом скидка для новых пользователей',
+      description: {
+        ky: 'Жаңы колдонуучуларга 50 сом арзандатуу',
+        ru: '50 сом скидка для новых пользователей',
+        en: '50 som discount for new users'
+      },
       icon: '🎁',
       color: '#f472b6'
     }
@@ -152,7 +261,7 @@ export default function DiscountPage() {
   const handleCopyPromo = (code) => {
     navigator.clipboard.writeText(code)
     setCopiedCode(code)
-    showToastMessage(`Код ${code} скопирован!`, 'success')
+    showToastMessage(`${t.copy}: ${code}!`, 'success')
     setTimeout(() => setCopiedCode(null), 2000)
   }
 
@@ -177,11 +286,15 @@ export default function DiscountPage() {
   const getRemainingTime = (expires) => {
     const diff = new Date(expires) - new Date()
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    if (days < 0) return 'Истек'
-    if (days === 0) return 'Последний день!'
-    if (days < 7) return `${days} дней`
-    if (days < 30) return `${Math.floor(days / 7)} недель`
-    return `${Math.floor(days / 30)} месяцев`
+    if (days < 0) return t.expired
+    if (days === 0) return t.lastDay
+    if (days < 7) return `${days} ${t.days}`
+    if (days < 30) return `${Math.floor(days / 7)} ${t.week}`
+    return `${Math.floor(days / 30)} ${t.month}`
+  }
+
+  const getDescription = (promo) => {
+    return promo.description[language] || promo.description.ru
   }
 
   const saleProducts = getSaleProducts()
@@ -196,20 +309,20 @@ export default function DiscountPage() {
     <div className="promo-page">
       <div className="promo-header">
         <button className="promo-back" onClick={() => navigate('/')}>
-          <FaArrowLeft /> Назад
+          <FaArrowLeft /> {t.back}
         </button>
-        <h1><FaTag /> Скидки и акции</h1>
+        <h1><FaTag /> {t.title}</h1>
       </div>
 
       <div className="promo-tabs">
         <button className={`promo-tab ${activeTab === 'all' ? 'active' : ''}`} onClick={() => setActiveTab('all')}>
-          Все скидки
+          {t.all}
         </button>
         <button className={`promo-tab ${activeTab === 'available' ? 'active' : ''}`} onClick={() => setActiveTab('available')}>
-          <FaGift /> Доступные
+          <FaGift /> {t.available}
         </button>
         <button className={`promo-tab ${activeTab === 'used' ? 'active' : ''}`} onClick={() => setActiveTab('used')}>
-          <FaCheck /> Использованные
+          <FaCheck /> {t.used}
         </button>
       </div>
 
@@ -218,21 +331,21 @@ export default function DiscountPage() {
           <div className="promo-stat-icon"><FaTag /></div>
           <div className="promo-stat-info">
             <h3>{promoCodes.length}</h3>
-            <p>Всего скидок</p>
+            <p>{t.total}</p>
           </div>
         </div>
         <div className="promo-stat-card">
           <div className="promo-stat-icon"><FaGift /></div>
           <div className="promo-stat-info">
             <h3>{promoCodes.filter(d => !usedCodes.includes(d.code)).length}</h3>
-            <p>Доступно</p>
+            <p>{t.availableCount}</p>
           </div>
         </div>
         <div className="promo-stat-card">
           <div className="promo-stat-icon"><FaFire /></div>
           <div className="promo-stat-info">
             <h3>{products.filter(p => p.discount > 0).length}</h3>
-            <p>Товаров со скидкой</p>
+            <p>{t.productsOnSale}</p>
           </div>
         </div>
       </div>
@@ -245,12 +358,12 @@ export default function DiscountPage() {
               <span className="promo-value">
                 {promo.type === 'percent' ? `${promo.discount}%` : `${promo.discount} сом`}
               </span>
-              <span className="promo-badge">Скидка</span>
+              <span className="promo-badge">{t.discount}</span>
             </div>
             <div className="promo-card-body">
-              <h3>{promo.description}</h3>
+              <h3>{getDescription(promo)}</h3>
               <p className="promo-code-box">
-                <span className="promo-code-label">Промокод:</span>
+                <span className="promo-code-label">{t.promo}:</span>
                 <span className="promo-code-value">{promo.code}</span>
                 <button 
                   className="promo-copy-btn"
@@ -261,7 +374,7 @@ export default function DiscountPage() {
               </p>
               <div className="promo-details">
                 <span><FaClock /> {getRemainingTime(promo.expires)}</span>
-                <span>Мин. заказ: {promo.minOrder} сом</span>
+                <span>{t.minOrder}: {promo.minOrder} сом</span>
                 {promo.category !== 'all' && <span className="promo-category-tag">{promo.category}</span>}
               </div>
               <button 
@@ -269,7 +382,7 @@ export default function DiscountPage() {
                 onClick={() => handleActivatePromo(promo.code)}
                 disabled={usedCodes.includes(promo.code)}
               >
-                {usedCodes.includes(promo.code) ? '✓ Использован' : 'Активировать'}
+                {usedCodes.includes(promo.code) ? `✓ ${t.usedText}` : t.activate}
               </button>
             </div>
           </div>
@@ -277,7 +390,7 @@ export default function DiscountPage() {
       </div>
 
       <div className="promo-products-section">
-        <h2><FaFire /> Товары со скидкой</h2>
+        <h2><FaFire /> {t.productsOnSale}</h2>
         <div className="promo-products-grid">
           {saleProducts.map(product => (
             <div key={product.id} className="promo-product-card" onClick={() => navigate(`/product/${product.id}`)}>
@@ -297,7 +410,7 @@ export default function DiscountPage() {
                   e.stopPropagation()
                   addToCart(product.id)
                 }}>
-                  <FaShoppingCart /> В корзину
+                  <FaShoppingCart /> {t.addToCart}
                 </button>
               </div>
             </div>
@@ -305,7 +418,7 @@ export default function DiscountPage() {
           {saleProducts.length === 0 && (
             <div className="promo-empty-placeholder">
               <FaTag className="promo-empty-icon" />
-              <p>Товаров со скидкой пока нет</p>
+              <p>{t.noProducts}</p>
             </div>
           )}
         </div>

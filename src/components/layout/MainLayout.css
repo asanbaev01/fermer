@@ -1,7 +1,28 @@
+
 /* components/layout/MainLayout.css */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: relative;
+  background: #0c0a09;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0 0.3rem;
+  }
 }
