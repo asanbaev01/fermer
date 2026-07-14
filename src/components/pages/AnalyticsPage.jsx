@@ -8,7 +8,8 @@ import {
   FaSortUp, FaSortDown, FaChevronLeft, FaChevronRight,
   FaPlus, FaMinus, FaTimes, FaCheck, FaClock, FaTruck,
   FaMapMarkerAlt, FaPhone, FaEnvelope, FaUser, FaTag,
-  FaPercent, FaChartLine, FaChartPie, FaChartArea
+  FaPercent, FaChartLine, FaChartPie, FaChartArea,
+  FaList
 } from 'react-icons/fa'
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, 

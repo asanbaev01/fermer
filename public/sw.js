@@ -1,4 +1,3 @@
-// public/sw.js
 const CACHE_NAME = 'agrobazar-v1'
 const ASSETS_TO_CACHE = [
   '/',
@@ -38,6 +37,22 @@ self.addEventListener('activate', (event) => {
 })
 
 self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes('/analytics')) {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return new Response(JSON.stringify({ error: 'Analytics data unavailable' }), {
+          headers: { 'Content-Type': 'application/json' }
+        })
+      })
+    )
+    return
+  }
+
+  if (event.request.url.includes('/api/')) {
+    event.respondWith(fetch(event.request))
+    return
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((cachedResponse) => {
@@ -52,9 +67,17 @@ self.addEventListener('fetch', (event) => {
             const responseToCache = response.clone()
             caches.open(CACHE_NAME)
               .then((cache) => {
-                cache.put(event.request, responseToCache)
+                try {
+                  cache.put(event.request, responseToCache)
+                } catch (error) {
+                  console.debug('Cache put error:', error)
+                }
               })
             return response
+          })
+          .catch((error) => {
+            console.debug('Fetch error:', error)
+            return new Response('Network error', { status: 503 })
           })
       })
   )
