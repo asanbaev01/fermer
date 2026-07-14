@@ -160,7 +160,6 @@ export default function Header() {
   return (
     <header className={`header ${scrolled ? 'header-scrolled' : ''}`}>
       <div className="header-container">
-        {/* 1-катар: Лого + Издөө + Тил/Тема/Меню */}
         <div className="header-row header-row-top">
           <div className="logo-wrapper" onClick={() => navigate('/')}>
             <div className="logo-icon-wrap">
@@ -235,7 +234,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* 2-катар: Баардык навигация */}
         <div className="header-row header-row-bottom">
           <div className="nav-wrapper">
             <div className="nav-left">
