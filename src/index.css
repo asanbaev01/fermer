@@ -1,4 +1,48 @@
-/* index.css - кошумча PWA стилдер */
+/* ============================================================
+   AgroBazar — Variant 1: "АЛА-КИЙИЗ" (Kyrgyz felt ornament)
+   INDEX — PWA & Global Styles
+   ============================================================ */
+
+/* ---------- PWA INSTALL BUTTON ---------- */
+#pwa-install-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #d4a847, #b8923a);
+  color: #0f1520;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 25px rgba(212, 168, 71, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 2px solid rgba(212, 168, 71, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+#pwa-install-btn::before {
+  content: '📲';
+  font-size: 18px;
+}
+
+#pwa-install-btn:hover {
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 8px 40px rgba(212, 168, 71, 0.35);
+  background: linear-gradient(135deg, #e8c96e, #d4a847);
+  border-color: rgba(212, 168, 71, 0.2);
+}
+
+#pwa-install-btn:active {
+  transform: scale(0.95);
+}
+
+/* ---------- ANIMATIONS ---------- */
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -10,20 +54,77 @@
   }
 }
 
-#pwa-install-btn {
-  animation: slideUp 0.5s ease-out;
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-#pwa-install-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+@keyframes pulseGold {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(212, 168, 71, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(212, 168, 71, 0.2);
+  }
+}
+
+/* ---------- GLOBAL SELECTION ---------- */
+::selection {
+  background: rgba(212, 168, 71, 0.2);
+  color: #e8e0d6;
+}
+
+/* ---------- SCROLLBAR ---------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1520;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4a847, #b8923a);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #e8c96e, #d4a847);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  #pwa-install-btn {
+    bottom: 15px;
+    right: 15px;
+    padding: 10px 18px;
+    font-size: 13px;
+    gap: 8px;
+  }
+  
+  #pwa-install-btn::before {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 480px) {
   #pwa-install-btn {
     bottom: 10px;
     right: 10px;
-    padding: 10px 16px;
-    font-size: 12px;
+    padding: 8px 14px;
+    font-size: 11px;
+    gap: 6px;
+    border-radius: 40px;
+  }
+  
+  #pwa-install-btn::before {
+    font-size: 14px;
   }
 }

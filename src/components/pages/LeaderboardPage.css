@@ -1,15 +1,15 @@
+/* ============================================================
+   AgroBazar — Variant 1: "АЛА-КИЙИЗ" (Kyrgyz felt ornament)
+   LEADERBOARD PAGE — Deep night-blue base, gold + crimson ornament accents
+   ============================================================ */
+
 .leaderboard-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
-  animation: fadeIn 0.5s ease-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* ---------- HEADER ---------- */
 .leaderboard-header {
   display: flex;
   justify-content: space-between;
@@ -22,24 +22,28 @@
 .leaderboard-header h1 {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fafaf9;
+  color: #e8e0d6;
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  background: linear-gradient(135deg, #d4a847, #e8c96e, #d4a847);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .leaderboard-header h1 svg {
-  color: #ffaa1d;
+  -webkit-text-fill-color: #d4a847;
+  color: #d4a847;
 }
 
 .leaderboard-back {
   padding: 0.5rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 50px;
-  background: transparent;
-  color: #a8a29e;
+  background: rgba(255, 255, 255, 0.02);
+  color: #a89c90;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -47,11 +51,13 @@
 }
 
 .leaderboard-back:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
-  border-color: #ffaa1d;
+  background: rgba(212, 168, 71, 0.04);
+  color: #e8e0d6;
+  border-color: rgba(212, 168, 71, 0.12);
+  transform: translateX(-4px);
 }
 
+/* ---------- FILTER ---------- */
 .leaderboard-filter {
   display: flex;
   gap: 0.5rem;
@@ -60,10 +66,10 @@
 
 .filter-btn {
   padding: 0.4rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 50px;
   background: transparent;
-  color: #a8a29e;
+  color: #a89c90;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.85rem;
@@ -71,16 +77,17 @@
 }
 
 .filter-btn:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  background: rgba(212, 168, 71, 0.04);
+  color: #e8e0d6;
 }
 
 .filter-btn.active {
-  background: #ffaa1d;
-  color: #121212;
-  border-color: #ffaa1d;
+  background: linear-gradient(135deg, #d4a847, #b8923a);
+  color: #0f1520;
+  border-color: #d4a847;
 }
 
+/* ---------- STATS ---------- */
 .leaderboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -89,10 +96,10 @@
 }
 
 .stat-card {
-  background: #211d19;
+  background: #1a2332;
   padding: 1.2rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(212, 168, 71, 0.04);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -101,39 +108,46 @@
 
 .stat-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 170, 29, 0.15);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  border-color: rgba(212, 168, 71, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .stat-icon {
   font-size: 2rem;
-  color: #ffaa1d;
-  background: rgba(255, 170, 29, 0.08);
+  color: #d4a847;
+  background: rgba(212, 168, 71, 0.04);
   width: 50px;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+  background: rgba(212, 168, 71, 0.08);
+  transform: scale(1.05) rotate(-6deg);
 }
 
 .stat-info h3 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: #e8e0d6;
   margin: 0;
 }
 
 .stat-info p {
   font-size: 0.8rem;
-  color: #a8a29e;
+  color: #a89c90;
   margin: 0;
 }
 
+/* ---------- LIST ---------- */
 .leaderboard-list {
-  background: #211d19;
+  background: #1a2332;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(212, 168, 71, 0.04);
   overflow: hidden;
 }
 
@@ -141,32 +155,49 @@
   display: grid;
   grid-template-columns: 80px 1fr 100px 120px 100px;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  color: #a8a29e;
+  background: rgba(255, 255, 255, 0.01);
+  color: #a89c90;
   font-size: 0.85rem;
   font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 2px solid rgba(212, 168, 71, 0.04);
 }
 
 .leaderboard-item {
   display: grid;
   grid-template-columns: 80px 1fr 100px 120px 100px;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  border-bottom: 2px solid rgba(212, 168, 71, 0.02);
   cursor: pointer;
   transition: all 0.3s ease;
   align-items: center;
 }
 
 .leaderboard-item:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(212, 168, 71, 0.02);
   transform: translateX(5px);
 }
 
-.leaderboard-item.top-three {
-  background: rgba(255, 170, 29, 0.03);
+.leaderboard-item:last-child {
+  border-bottom: none;
 }
 
+.leaderboard-item.top-three {
+  background: rgba(212, 168, 71, 0.03);
+}
+
+.leaderboard-item.top-three:first-child {
+  background: rgba(212, 168, 71, 0.06);
+}
+
+.leaderboard-item.top-three:nth-child(2) {
+  background: rgba(212, 168, 71, 0.04);
+}
+
+.leaderboard-item.top-three:nth-child(3) {
+  background: rgba(212, 168, 71, 0.03);
+}
+
+/* ---------- RANK ---------- */
 .leaderboard-rank {
   display: flex;
   align-items: center;
@@ -178,11 +209,12 @@
 }
 
 .rank-number {
-  color: #a8a29e;
+  color: #a89c90;
   font-weight: 600;
   font-size: 0.9rem;
 }
 
+/* ---------- USER ---------- */
 .leaderboard-user {
   display: flex;
   align-items: center;
@@ -200,59 +232,122 @@
 
 .user-name {
   font-weight: 600;
-  color: #fff;
+  color: #e8e0d6;
   font-size: 0.95rem;
 }
 
 .user-farm {
   font-size: 0.75rem;
-  color: #a8a29e;
+  color: #a89c90;
 }
 
+/* ---------- STATS COLUMNS ---------- */
 .leaderboard-products,
 .leaderboard-sales,
 .leaderboard-rating {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #a8a29e;
+  color: #a89c90;
   font-size: 0.9rem;
 }
 
 .leaderboard-products svg,
 .leaderboard-sales svg {
-  color: #ffaa1d;
+  color: #d4a847;
 }
 
+.leaderboard-rating svg {
+  color: #e8c96e;
+}
+
+/* ---------- KYIAL DIVIDER ---------- */
+.leaderboard-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 1.5rem 0;
+}
+
+.leaderboard-divider::before,
+.leaderboard-divider::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 71, 0.06), transparent);
+}
+
+.leaderboard-divider .horn {
+  color: rgba(212, 168, 71, 0.08);
+  font-size: 1.2rem;
+  letter-spacing: 6px;
+}
+
+/* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {
   .leaderboard-header {
     flex-direction: column;
     align-items: flex-start;
   }
+  
   .leaderboard-list-header {
     display: none;
   }
+  
   .leaderboard-item {
     grid-template-columns: 1fr;
     gap: 0.5rem;
     padding: 1rem;
   }
+  
   .leaderboard-rank {
     justify-content: flex-start;
   }
+  
   .leaderboard-products,
   .leaderboard-sales,
   .leaderboard-rating {
     font-size: 0.8rem;
   }
+  
   .leaderboard-stats {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .leaderboard-page { padding: 1rem; }
-  .leaderboard-stats { grid-template-columns: 1fr; }
-  .leaderboard-filter { flex-direction: column; width: 100%; }
-  .filter-btn { width: 100%; justify-content: center; }
+  .leaderboard-page {
+    padding: 1rem;
+  }
+  
+  .leaderboard-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .leaderboard-filter {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .filter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .leaderboard-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .leaderboard-item {
+    padding: 0.8rem;
+  }
+  
+  .user-avatar {
+    font-size: 1.6rem;
+  }
+  
+  .user-name {
+    font-size: 0.85rem;
+  }
 }

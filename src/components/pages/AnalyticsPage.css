@@ -1,15 +1,15 @@
+/* ============================================================
+   AgroBazar — Variant 1: "АЛА-КИЙИЗ" (Kyrgyz felt ornament)
+   ANALYTICS PAGE — Deep night-blue base, gold + crimson ornament accents
+   ============================================================ */
+
 .analytics-page {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
-  animation: fadeIn 0.5s ease-out;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* ---------- HEADER ---------- */
 .analytics-header {
   display: flex;
   justify-content: space-between;
@@ -35,22 +35,22 @@
 .analytics-header h1 {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fafaf9;
+  color: #e8e0d6;
   display: flex;
   align-items: center;
   gap: 0.8rem;
 }
 
 .analytics-header h1 svg {
-  color: #ffaa1d;
+  color: #d4a847;
 }
 
 .analytics-back {
   padding: 0.5rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 50px;
   background: transparent;
-  color: #a8a29e;
+  color: #a89c90;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -60,17 +60,17 @@
 }
 
 .analytics-back:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
-  border-color: #ffaa1d;
+  background: rgba(212, 168, 71, 0.05);
+  color: #e8e0d6;
+  border-color: rgba(212, 168, 71, 0.15);
 }
 
 .analytics-action-btn {
   padding: 0.4rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 50px;
   background: transparent;
-  color: #a8a29e;
+  color: #a89c90;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -80,11 +80,12 @@
 }
 
 .analytics-action-btn:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
-  border-color: #ffaa1d;
+  background: rgba(212, 168, 71, 0.05);
+  color: #e8e0d6;
+  border-color: rgba(212, 168, 71, 0.15);
 }
 
+/* ---------- PERIOD ---------- */
 .analytics-period {
   display: flex;
   gap: 0.5rem;
@@ -92,10 +93,10 @@
 
 .period-btn {
   padding: 0.4rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 50px;
   background: transparent;
-  color: #a8a29e;
+  color: #a89c90;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.85rem;
@@ -103,21 +104,22 @@
 }
 
 .period-btn:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  background: rgba(212, 168, 71, 0.04);
+  color: #e8e0d6;
 }
 
 .period-btn.active {
-  background: #ffaa1d;
-  color: #121212;
-  border-color: #ffaa1d;
+  background: linear-gradient(135deg, #d4a847, #b8923a);
+  color: #0f1520;
+  border-color: #d4a847;
 }
 
+/* ---------- FILTERS ---------- */
 .analytics-filters {
-  background: #211d19;
+  background: #1a2332;
   padding: 1.2rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(212, 168, 71, 0.04);
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -134,52 +136,52 @@
 .filter-input {
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fafaf9;
+  border: 2px solid rgba(212, 168, 71, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: #e8e0d6;
   font-size: 0.9rem;
   min-width: 200px;
 }
 
 .filter-input:focus {
   outline: none;
-  border-color: #ffaa1d;
+  border-color: #d4a847;
 }
 
 .filter-select {
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fafaf9;
+  border: 2px solid rgba(212, 168, 71, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: #e8e0d6;
   font-size: 0.9rem;
   min-width: 150px;
 }
 
 .filter-select option {
-  background: #211d19;
+  background: #1a2332;
 }
 
 .filter-date {
   padding: 0.5rem 0.8rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fafaf9;
+  border: 2px solid rgba(212, 168, 71, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: #e8e0d6;
   font-size: 0.9rem;
 }
 
 .filter-date:focus {
   outline: none;
-  border-color: #ffaa1d;
+  border-color: #d4a847;
 }
 
 .filter-clear {
   padding: 0.4rem 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 2px solid rgba(158, 42, 43, 0.2);
   background: transparent;
-  color: #ef4444;
+  color: #c0392b;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -189,9 +191,10 @@
 }
 
 .filter-clear:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(158, 42, 43, 0.08);
 }
 
+/* ---------- STATS ---------- */
 .analytics-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -200,10 +203,10 @@
 }
 
 .stat-card {
-  background: #211d19;
+  background: #1a2332;
   padding: 1.2rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(212, 168, 71, 0.04);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -213,14 +216,14 @@
 
 .stat-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 170, 29, 0.15);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  border-color: rgba(212, 168, 71, 0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
 
 .stat-icon {
   font-size: 2rem;
-  color: #ffaa1d;
-  background: rgba(255, 170, 29, 0.08);
+  color: #d4a847;
+  background: rgba(212, 168, 71, 0.06);
   width: 50px;
   height: 50px;
   display: flex;
@@ -236,13 +239,13 @@
 .stat-info h3 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: #e8e0d6;
   margin: 0;
 }
 
 .stat-info p {
   font-size: 0.8rem;
-  color: #a8a29e;
+  color: #a89c90;
   margin: 0;
 }
 
@@ -258,14 +261,15 @@
 
 .stat-change.positive {
   color: #34d399;
-  background: rgba(52, 211, 153, 0.1);
+  background: rgba(52, 211, 153, 0.08);
 }
 
 .stat-change.negative {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
+  color: #c0392b;
+  background: rgba(158, 42, 43, 0.08);
 }
 
+/* ---------- CHARTS ---------- */
 .analytics-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -274,15 +278,15 @@
 }
 
 .chart-card {
-  background: #211d19;
+  background: #1a2332;
   padding: 1.5rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(212, 168, 71, 0.04);
   transition: all 0.3s ease;
 }
 
 .chart-card:hover {
-  border-color: rgba(255, 170, 29, 0.15);
+  border-color: rgba(212, 168, 71, 0.08);
 }
 
 .chart-card.full-width {
@@ -299,10 +303,14 @@
 .chart-card h3 {
   font-size: 1rem;
   font-weight: 600;
-  color: #fafaf9;
+  color: #e8e0d6;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.chart-card h3 svg {
+  color: #d4a847;
 }
 
 .chart-controls {
@@ -312,31 +320,32 @@
 
 .chart-type-btn {
   padding: 0.3rem 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 6px;
   background: transparent;
-  color: #a8a29e;
+  color: #a89c90;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.8rem;
 }
 
 .chart-type-btn:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  background: rgba(212, 168, 71, 0.04);
+  color: #e8e0d6;
 }
 
 .chart-type-btn.active {
-  background: #ffaa1d;
-  color: #121212;
-  border-color: #ffaa1d;
+  background: linear-gradient(135deg, #d4a847, #b8923a);
+  color: #0f1520;
+  border-color: #d4a847;
 }
 
+/* ---------- TABLE ---------- */
 .analytics-table {
-  background: #211d19;
+  background: #1a2332;
   padding: 1.5rem;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(212, 168, 71, 0.04);
 }
 
 .table-header {
@@ -351,10 +360,14 @@
 .analytics-table h3 {
   font-size: 1rem;
   font-weight: 600;
-  color: #fafaf9;
+  color: #e8e0d6;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.analytics-table h3 svg {
+  color: #d4a847;
 }
 
 .table-controls {
@@ -370,36 +383,36 @@
 
 .view-btn {
   padding: 0.3rem 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 6px;
   background: transparent;
-  color: #a8a29e;
+  color: #a89c90;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .view-btn:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  background: rgba(212, 168, 71, 0.04);
+  color: #e8e0d6;
 }
 
 .view-btn.active {
-  background: #ffaa1d;
-  color: #121212;
-  border-color: #ffaa1d;
+  background: linear-gradient(135deg, #d4a847, #b8923a);
+  color: #0f1520;
+  border-color: #d4a847;
 }
 
 .items-select {
   padding: 0.3rem 0.8rem;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fafaf9;
+  border: 2px solid rgba(212, 168, 71, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: #e8e0d6;
   font-size: 0.85rem;
 }
 
 .items-select option {
-  background: #211d19;
+  background: #1a2332;
 }
 
 .table-container {
@@ -414,30 +427,32 @@ table {
 thead th {
   padding: 0.8rem 1rem;
   text-align: left;
-  color: #a8a29e;
+  color: #a89c90;
   font-size: 0.85rem;
   font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 2px solid rgba(212, 168, 71, 0.04);
   cursor: pointer;
   user-select: none;
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
 }
 
 thead th:hover {
-  color: #fafaf9;
+  color: #e8e0d6;
+}
+
+thead th svg {
+  color: #d4a847;
+  font-size: 0.8rem;
 }
 
 tbody td {
   padding: 0.8rem 1rem;
-  color: #fafaf9;
+  color: #e8e0d6;
   font-size: 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+  border-bottom: 2px solid rgba(212, 168, 71, 0.02);
 }
 
 tbody tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(212, 168, 71, 0.02);
 }
 
 .product-cell {
@@ -451,14 +466,15 @@ tbody tr:hover {
 
 .product-id {
   font-size: 0.7rem;
-  color: #a8a29e;
+  color: #a89c90;
 }
 
 .amount-cell {
   font-weight: 600;
-  color: #fbbf24;
+  color: #d4a847;
 }
 
+/* ---------- STATUS BADGE ---------- */
 .status-badge {
   padding: 0.2rem 0.8rem;
   border-radius: 50px;
@@ -470,29 +486,30 @@ tbody tr:hover {
 }
 
 .status-badge.pending {
-  background: rgba(255, 170, 29, 0.15);
-  color: #ffaa1d;
+  background: rgba(212, 168, 71, 0.12);
+  color: #d4a847;
 }
 
 .status-badge.confirmed {
-  background: rgba(52, 211, 153, 0.15);
-  color: #34d399;
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
 }
 
 .status-badge.delivered {
-  background: rgba(52, 211, 153, 0.15);
-  color: #34d399;
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
 }
 
 .status-badge.cancelled {
-  background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  background: rgba(158, 42, 43, 0.12);
+  color: #c0392b;
 }
 
+/* ---------- EMPTY STATE ---------- */
 .empty-state {
   text-align: center;
   padding: 2rem !important;
-  color: #a8a29e;
+  color: #a89c90;
 }
 
 .empty-state svg {
@@ -501,8 +518,11 @@ tbody tr:hover {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  color: #d4a847;
+  opacity: 0.3;
 }
 
+/* ---------- PAGINATION ---------- */
 .table-pagination {
   display: flex;
   justify-content: center;
@@ -510,23 +530,23 @@ tbody tr:hover {
   gap: 1rem;
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 2px solid rgba(212, 168, 71, 0.04);
 }
 
 .page-btn {
   padding: 0.3rem 0.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(212, 168, 71, 0.06);
   border-radius: 6px;
   background: transparent;
-  color: #a8a29e;
+  color: #a89c90;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .page-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
-  border-color: #ffaa1d;
+  background: rgba(212, 168, 71, 0.04);
+  color: #e8e0d6;
+  border-color: rgba(212, 168, 71, 0.12);
 }
 
 .page-btn:disabled {
@@ -535,10 +555,34 @@ tbody tr:hover {
 }
 
 .page-info {
-  color: #a8a29e;
+  color: #a89c90;
   font-size: 0.9rem;
 }
 
+/* ---------- KYIAL DIVIDER ---------- */
+.analytics-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 2rem 0;
+}
+
+.analytics-divider::before,
+.analytics-divider::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 71, 0.08), transparent);
+}
+
+.analytics-divider .horn {
+  color: rgba(212, 168, 71, 0.12);
+  font-size: 1.2rem;
+  letter-spacing: 6px;
+}
+
+/* ---------- RESPONSIVE ---------- */
 @media (max-width: 1024px) {
   .analytics-grid {
     grid-template-columns: 1fr;
@@ -550,40 +594,92 @@ tbody tr:hover {
     flex-direction: column;
     align-items: flex-start;
   }
+  
   .analytics-header-right {
     width: 100%;
     flex-wrap: wrap;
   }
+  
   .analytics-stats {
     grid-template-columns: 1fr 1fr;
   }
+  
   .analytics-filters {
     flex-direction: column;
     align-items: stretch;
   }
+  
   .filter-group {
     flex-wrap: wrap;
   }
-  .filter-input, .filter-select, .filter-date {
+  
+  .filter-input,
+  .filter-select,
+  .filter-date {
     width: 100%;
     min-width: auto;
   }
+  
   .analytics-period {
     flex-wrap: wrap;
+  }
+  
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .analytics-page { padding: 1rem; }
-  .analytics-stats { grid-template-columns: 1fr; }
-  .stat-card { padding: 0.8rem; }
-  .stat-icon { width: 40px; height: 40px; font-size: 1.5rem; }
-  .stat-info h3 { font-size: 1.2rem; }
+  .analytics-page {
+    padding: 1rem;
+  }
+  
+  .analytics-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-card {
+    padding: 0.8rem;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  
+  .stat-info h3 {
+    font-size: 1.2rem;
+  }
+  
+  .analytics-header h1 {
+    font-size: 1.3rem;
+  }
+  
   .table-header {
     flex-direction: column;
     align-items: stretch;
   }
+  
   .table-controls {
     flex-wrap: wrap;
+  }
+  
+  .view-toggle {
+    flex-wrap: wrap;
+  }
+  
+  .analytics-filters {
+    padding: 0.8rem;
+  }
+  
+  .chart-card {
+    padding: 1rem;
+  }
+  
+  .analytics-table {
+    padding: 1rem;
   }
 }
