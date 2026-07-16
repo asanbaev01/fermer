@@ -1,6 +1,7 @@
 /* ============================================================
    AgroBazar — Royal Ala-Kiyiz Premium Edition
    "АЛА-КИЙИЗ" — Luxury Kyrgyz Felt Ornament Design
+   FULL ANIMATION EDITION
    ============================================================ */
 
 /* ---------- GOOGLE FONTS ---------- */
@@ -8,7 +9,6 @@
 
 /* ---------- ROOT VARIABLES ---------- */
 :root {
-  /* Colors */
   --color-primary: #0f1520;
   --color-primary-light: #1a2332;
   --color-primary-dark: #0a0e16;
@@ -22,24 +22,16 @@
   --color-border: rgba(212, 168, 71, 0.25);
   --color-card-bg: rgba(26, 35, 50, 0.85);
   --color-shadow: rgba(0, 0, 0, 0.6);
-
-  /* Gradients */
   --gradient-ornament: linear-gradient(135deg, var(--color-gold), var(--color-crimson));
   --gradient-border: linear-gradient(135deg, var(--color-gold), var(--color-crimson), var(--color-gold));
   --gradient-gold: linear-gradient(135deg, #d4a847, #e8c96e, #d4a847);
   --gradient-crimson: linear-gradient(135deg, #9e2a2b, #c0392b, #9e2a2b);
-
-  /* Fonts */
   --font-primary: 'Outfit', 'Inter', -apple-system, sans-serif;
   --font-display: 'Playfair Display', 'Outfit', serif;
   --font-size-base: 18px;
-
-  /* Glassmorphism */
   --glass-bg: rgba(26, 35, 50, 0.55);
   --glass-border: rgba(212, 168, 71, 0.08);
   --glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
-
-  /* Luxury */
   --shadow-luxury: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(212, 168, 71, 0.02);
   --shadow-glow: 0 0 40px rgba(212, 168, 71, 0.05), 0 0 80px rgba(212, 168, 71, 0.02);
   --transition-apple: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -64,7 +56,102 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------- PREMIUM SCROLLBAR ---------- */
+/* ============================================================
+   SECTION 1: SCROLL ANIMATIONS
+   ============================================================ */
+
+/* ---------- SCROLL REVEAL BASE ---------- */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px) scale(0.96);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
+}
+
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---------- SCROLL REVEAL VARIANTS ---------- */
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-60px) scale(0.94);
+  transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
+}
+.scroll-reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(60px) scale(0.94);
+  transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
+}
+.scroll-reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.scroll-reveal-zoom {
+  opacity: 0;
+  transform: scale(0.8) rotate(-2deg);
+  transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
+}
+.scroll-reveal-zoom.visible {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.scroll-reveal-rotate {
+  opacity: 0;
+  transform: perspective(800px) rotateX(15deg) translateY(30px);
+  transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
+}
+.scroll-reveal-rotate.visible {
+  opacity: 1;
+  transform: perspective(800px) rotateX(0deg) translateY(0);
+}
+
+/* ---------- STAGGER CHILDREN ---------- */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform, opacity;
+}
+.stagger-children.visible > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(2) { transition-delay: 0.10s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(3) { transition-delay: 0.15s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(4) { transition-delay: 0.20s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(5) { transition-delay: 0.25s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(6) { transition-delay: 0.30s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(7) { transition-delay: 0.35s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(8) { transition-delay: 0.40s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(9) { transition-delay: 0.45s; opacity: 1; transform: translateY(0); }
+.stagger-children.visible > *:nth-child(10) { transition-delay: 0.50s; opacity: 1; transform: translateY(0); }
+
+/* ---------- SCROLL PROGRESS INDICATOR ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-gold-light), var(--color-gold));
+  z-index: 9999;
+  width: 0%;
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 30px rgba(212, 168, 71, 0.3);
+}
+
+/* ============================================================
+   SECTION 2: PREMIUM SCROLLBAR
+   ============================================================ */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -84,7 +171,9 @@ body {
   box-shadow: 0 0 50px rgba(212, 168, 71, 0.25);
 }
 
-/* ---------- CINEMATIC BACKGROUND ---------- */
+/* ============================================================
+   SECTION 3: CINEMATIC BACKGROUND
+   ============================================================ */
 body::before {
   content: '';
   position: fixed;
@@ -95,17 +184,14 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background: 
-    /* Premium Ala-Kiyiz Ornaments - 5-8% opacity */
     radial-gradient(ellipse 60px 80px at 5% 15%, rgba(212, 168, 71, 0.06) 0%, transparent 70%),
     radial-gradient(ellipse 80px 60px at 95% 85%, rgba(212, 168, 71, 0.05) 0%, transparent 70%),
     radial-gradient(ellipse 70px 70px at 50% 50%, rgba(212, 168, 71, 0.04) 0%, transparent 60%),
     radial-gradient(ellipse 50px 70px at 20% 80%, rgba(212, 168, 71, 0.05) 0%, transparent 60%),
     radial-gradient(ellipse 70px 50px at 80% 20%, rgba(212, 168, 71, 0.04) 0%, transparent 60%),
-    /* Crimson accents - 5% opacity */
     radial-gradient(circle 40px at 20% 70%, rgba(158, 42, 43, 0.05) 0%, transparent 60%),
     radial-gradient(circle 35px at 80% 30%, rgba(158, 42, 43, 0.04) 0%, transparent 60%),
     radial-gradient(circle 30px at 50% 90%, rgba(158, 42, 43, 0.03) 0%, transparent 50%),
-    /* Felt pattern texture - 3% opacity */
     repeating-linear-gradient(45deg, rgba(212, 168, 71, 0.02) 0px, rgba(212, 168, 71, 0.02) 2px, transparent 2px, transparent 10px),
     repeating-linear-gradient(-45deg, rgba(158, 42, 43, 0.015) 0px, rgba(158, 42, 43, 0.015) 2px, transparent 2px, transparent 10px);
   animation: ornamentFloat 80s ease-in-out infinite;
@@ -175,36 +261,18 @@ body::after {
 .particle:nth-child(10) { left: 66%; animation-delay: 3.5s; animation-duration: 31s; background: var(--color-gold); }
 
 @keyframes particleDrift {
-  0% {
-    transform: translate(0, 0) scale(0);
-    opacity: 0;
-  }
-  5% {
-    opacity: 0.3;
-  }
-  15% {
-    transform: translate(30px, -60px) scale(1.2);
-    opacity: 0.7;
-  }
-  30% {
-    transform: translate(80px, -150px) scale(1);
-    opacity: 0.5;
-  }
-  60% {
-    transform: translate(150px, -280px) scale(0.8);
-    opacity: 0.3;
-  }
-  85% {
-    transform: translate(200px, -380px) scale(0.5);
-    opacity: 0.1;
-  }
-  100% {
-    transform: translate(250px, -500px) scale(0);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) scale(0); opacity: 0; }
+  5% { opacity: 0.3; }
+  15% { transform: translate(30px, -60px) scale(1.2); opacity: 0.7; }
+  30% { transform: translate(80px, -150px) scale(1); opacity: 0.5; }
+  60% { transform: translate(150px, -280px) scale(0.8); opacity: 0.3; }
+  85% { transform: translate(200px, -380px) scale(0.5); opacity: 0.1; }
+  100% { transform: translate(250px, -500px) scale(0); opacity: 0; }
 }
 
-/* ---------- GLASSMORPHISM ---------- */
+/* ============================================================
+   SECTION 4: GLASSMORPHISM
+   ============================================================ */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -230,7 +298,9 @@ body::after {
   transform: translateY(-4px);
 }
 
-/* ---------- GRADIENT BORDER ---------- */
+/* ============================================================
+   SECTION 5: GRADIENT BORDER
+   ============================================================ */
 .gradient-border {
   position: relative;
   border-radius: 20px;
@@ -262,27 +332,12 @@ body::after {
   50% { background-position: 200% 50%; }
 }
 
-/* ---------- GOLD GLOW EFFECTS ---------- */
-.gold-glow {
-  box-shadow: 0 0 40px rgba(212, 168, 71, 0.04), 0 0 80px rgba(212, 168, 71, 0.02);
-}
-
-.gold-glow-hover {
-  transition: var(--transition-apple);
-}
-.gold-glow-hover:hover {
-  box-shadow: 0 0 60px rgba(212, 168, 71, 0.08), 0 0 120px rgba(212, 168, 71, 0.04);
-  transform: translateY(-2px);
-}
-
-/* ---------- GOLD SHIMMER ANIMATION ---------- */
+/* ============================================================
+   SECTION 6: GOLD SHIMMER ANIMATION
+   ============================================================ */
 @keyframes goldShimmer {
-  0%, 100% {
-    background-position: 0% center;
-  }
-  50% {
-    background-position: 200% center;
-  }
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 200% center; }
 }
 
 .gold-shimmer {
@@ -294,16 +349,9 @@ body::after {
   background-clip: text;
 }
 
-/* ---------- CRIMSON ACCENT LIGHTING ---------- */
-.crimson-glow {
-  box-shadow: 0 0 40px rgba(158, 42, 43, 0.04), 0 0 80px rgba(158, 42, 43, 0.02);
-}
-
-.crimson-glow-hover:hover {
-  box-shadow: 0 0 60px rgba(158, 42, 43, 0.08), 0 0 120px rgba(158, 42, 43, 0.04);
-}
-
-/* ---------- PREMIUM HOVER EFFECTS ---------- */
+/* ============================================================
+   SECTION 7: PREMIUM HOVER EFFECTS
+   ============================================================ */
 .hover-lift {
   transition: var(--transition-apple);
 }
@@ -321,38 +369,9 @@ body::after {
   box-shadow: 0 0 40px rgba(212, 168, 71, 0.04);
 }
 
-/* ---------- LUXURY SHADOWS ---------- */
-.shadow-luxury {
-  box-shadow: var(--shadow-luxury);
-}
-.shadow-glow {
-  box-shadow: var(--shadow-glow);
-}
-
-/* ---------- PREMIUM FOCUS EFFECTS ---------- */
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: var(--color-gold);
-  box-shadow: 0 0 0 4px rgba(212, 168, 71, 0.06), 0 0 40px rgba(212, 168, 71, 0.04);
-  transition: all 0.4s ease;
-}
-
-/* ---------- HOME PAGE CONTAINER ---------- */
-.home-page {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 24px 32px 48px;
-  position: relative;
-  z-index: 1;
-  background: 
-    radial-gradient(ellipse at 20% 50%, rgba(212, 168, 71, 0.03) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(158, 42, 43, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(139, 92, 246, 0.015) 0%, transparent 50%);
-}
-
-/* ---------- KYIAL DIVIDER ---------- */
+/* ============================================================
+   SECTION 8: KYIAL DIVIDER WITH ANIMATION
+   ============================================================ */
 .kyial-divider {
   position: relative;
   display: flex;
@@ -390,7 +409,24 @@ select:focus {
   margin-left: 8px;
 }
 
-/* ---------- HERO SECTION ---------- */
+/* ============================================================
+   SECTION 9: HOME PAGE CONTAINER
+   ============================================================ */
+.home-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 32px 48px;
+  position: relative;
+  z-index: 1;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(212, 168, 71, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(158, 42, 43, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(139, 92, 246, 0.015) 0%, transparent 50%);
+}
+
+/* ============================================================
+   SECTION 10: HERO SECTION
+   ============================================================ */
 .hero-section {
   position: relative;
   display: flex;
@@ -413,7 +449,7 @@ select:focus {
   background: linear-gradient(90deg, transparent, var(--color-gold), var(--color-crimson), var(--color-gold), transparent);
 }
 
-/* Hero Banner */
+/* ---------- HERO BANNER ---------- */
 .hero-banner-container {
   position: relative;
   border-radius: 18px;
@@ -453,6 +489,11 @@ select:focus {
   line-height: 1;
   flex-shrink: 0;
   filter: drop-shadow(0 0 30px rgba(212, 168, 71, 0.05));
+  animation: iconFloat 4s ease-in-out infinite;
+}
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(4deg); }
 }
 .hero-banner-card-text {
   flex: 1;
@@ -517,7 +558,7 @@ select:focus {
   box-shadow: 0 0 40px rgba(212, 168, 71, 0.2);
 }
 
-/* Hero Content */
+/* ---------- HERO CONTENT ---------- */
 .hero-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -612,7 +653,7 @@ select:focus {
   box-shadow: 0 0 50px rgba(212, 168, 71, 0.04);
 }
 
-/* Hero Stats */
+/* ---------- HERO STATS ---------- */
 .hero-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -663,7 +704,9 @@ select:focus {
   font-weight: 400;
 }
 
-/* ---------- QUICK ACTIONS ---------- */
+/* ============================================================
+   SECTION 11: QUICK ACTIONS
+   ============================================================ */
 .quick-actions {
   display: flex;
   gap: 12px;
@@ -696,7 +739,9 @@ select:focus {
   color: var(--color-gold);
 }
 
-/* ---------- USER PROFILE BAR ---------- */
+/* ============================================================
+   SECTION 12: USER PROFILE BAR
+   ============================================================ */
 .user-profile-bar {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -723,6 +768,11 @@ select:focus {
   font-size: 48px;
   line-height: 1;
   filter: drop-shadow(0 0 30px rgba(212, 168, 71, 0.05));
+  animation: avatarPulse 6s ease-in-out infinite;
+}
+@keyframes avatarPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 .profile-details {
   display: flex;
@@ -767,7 +817,9 @@ select:focus {
   transform: translateY(-2px);
 }
 
-/* ---------- CATEGORIES HERO ---------- */
+/* ============================================================
+   SECTION 13: CATEGORIES HERO
+   ============================================================ */
 .categories-hero {
   margin-bottom: 28px;
 }
@@ -833,7 +885,9 @@ select:focus {
   background: rgba(212, 168, 71, 0.04);
 }
 
-/* ---------- REGIONS & CATEGORIES BAR ---------- */
+/* ============================================================
+   SECTION 14: REGIONS & CATEGORIES BAR
+   ============================================================ */
 .regions-bar,
 .categories-bar {
   margin-bottom: 18px;
@@ -909,7 +963,9 @@ select:focus {
   border-style: solid;
 }
 
-/* ---------- FILTER & SORT BAR ---------- */
+/* ============================================================
+   SECTION 15: FILTER & SORT BAR
+   ============================================================ */
 .filter-sort-bar {
   margin-bottom: 24px;
   padding: 14px 0;
@@ -975,7 +1031,9 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(212, 168, 71, 0.06), 0 0 40px rgba(212, 168, 71, 0.03);
 }
 
-/* ---------- TAB BAR ---------- */
+/* ============================================================
+   SECTION 16: TAB BAR
+   ============================================================ */
 .tab-bar {
   display: flex;
   gap: 8px;
@@ -1017,7 +1075,9 @@ select:focus {
   color: var(--color-gold-light);
 }
 
-/* ---------- SECTION HEADER ---------- */
+/* ============================================================
+   SECTION 17: SECTION HEADER
+   ============================================================ */
 .section-header {
   display: flex;
   align-items: center;
@@ -1045,7 +1105,9 @@ select:focus {
   background: rgba(255, 255, 255, 0.02);
 }
 
-/* ---------- STATS SECTION ---------- */
+/* ============================================================
+   SECTION 18: STATS SECTION
+   ============================================================ */
 .stats-section {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -1090,7 +1152,9 @@ select:focus {
   color: var(--color-text-muted);
 }
 
-/* ---------- PRODUCTS GRID ---------- */
+/* ============================================================
+   SECTION 19: PRODUCTS GRID
+   ============================================================ */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1290,7 +1354,9 @@ select:focus {
   box-shadow: 0 0 40px rgba(212, 168, 71, 0.02);
 }
 
-/* ---------- SHOW MORE ---------- */
+/* ============================================================
+   SECTION 20: SHOW MORE
+   ============================================================ */
 .show-more-container {
   display: flex;
   justify-content: center;
@@ -1316,7 +1382,9 @@ select:focus {
   box-shadow: 0 0 40px rgba(212, 168, 71, 0.02);
 }
 
-/* ---------- REQUESTS ---------- */
+/* ============================================================
+   SECTION 21: REQUESTS
+   ============================================================ */
 .requests-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1403,7 +1471,9 @@ select:focus {
   transform: scale(1.02);
 }
 
-/* ---------- ORDERS ---------- */
+/* ============================================================
+   SECTION 22: ORDERS
+   ============================================================ */
 .orders-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1472,7 +1542,9 @@ select:focus {
   padding-top: 12px;
 }
 
-/* ---------- EMPTY STATE ---------- */
+/* ============================================================
+   SECTION 23: EMPTY STATE
+   ============================================================ */
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
@@ -1508,7 +1580,9 @@ select:focus {
   box-shadow: 0 8px 50px rgba(212, 168, 71, 0.3);
 }
 
-/* ---------- TOP PRODUCTS ---------- */
+/* ============================================================
+   SECTION 24: TOP PRODUCTS
+   ============================================================ */
 .top-products-section,
 .new-products-section {
   margin: 32px 0 28px;
@@ -1583,7 +1657,9 @@ select:focus {
   gap: 6px;
 }
 
-/* ---------- FEATURES SECTION ---------- */
+/* ============================================================
+   SECTION 25: FEATURES SECTION
+   ============================================================ */
 .features-section {
   margin: 36px 0 32px;
   padding: 32px 0;
@@ -1647,7 +1723,9 @@ select:focus {
   color: var(--color-text-muted);
 }
 
-/* ---------- TESTIMONIALS ---------- */
+/* ============================================================
+   SECTION 26: TESTIMONIALS
+   ============================================================ */
 .testimonials-section {
   margin: 32px 0 36px;
 }
@@ -1721,7 +1799,9 @@ select:focus {
   display: block;
 }
 
-/* ---------- CTA SECTION ---------- */
+/* ============================================================
+   SECTION 27: CTA SECTION
+   ============================================================ */
 .cta-section {
   margin: 36px 0 32px;
   padding: 48px 28px;
@@ -1820,7 +1900,9 @@ select:focus {
   box-shadow: 0 0 50px rgba(212, 168, 71, 0.02);
 }
 
-/* ---------- PARTNERS ---------- */
+/* ============================================================
+   SECTION 28: PARTNERS
+   ============================================================ */
 .partners-section {
   margin-top: 32px;
   padding: 24px 0;
@@ -1868,7 +1950,9 @@ select:focus {
   box-shadow: 0 0 40px rgba(212, 168, 71, 0.02);
 }
 
-/* ---------- 4K RESPONSIVE ---------- */
+/* ============================================================
+   SECTION 29: 4K RESPONSIVE
+   ============================================================ */
 @media (max-width: 2560px) {
   .home-page {
     padding: 32px 48px 64px;

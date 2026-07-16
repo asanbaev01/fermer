@@ -1,3 +1,4 @@
+// Header.jsx - Добавить, John Doe, Выйти оң жакка жылдырылды
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -20,6 +21,7 @@ import {
   FaMoon,
   FaBars,
   FaTimes,
+  FaChevronDown,
 } from 'react-icons/fa';
 import { AppContext } from '../../context/AppContext';
 import './Header.css';
@@ -48,10 +50,27 @@ export default function Header() {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isDark, setIsDark] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const headerRef = useRef(null);
   const langMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const notifRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 60) {
+        setIsHeaderVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsHeaderVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -68,14 +87,6 @@ export default function Header() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [setShowNotifications]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleLogout = () => {
     setCurrentUser(null);
@@ -158,121 +169,82 @@ export default function Header() {
   ];
 
   return (
-    <header className={`header ${scrolled ? 'header-scrolled' : ''}`}>
-      <div className="header-container">
-        <div className="header-row header-row-top">
-          <div className="logo-wrapper" onClick={() => navigate('/')}>
-            <div className="logo-icon-wrap">
-              <FaLeaf className="logo-icon" />
+    <>
+      <header
+        ref={headerRef}
+        className={`header ${!isHeaderVisible ? 'header-hidden' : ''} ${
+          isExpanded ? 'header-expanded' : ''
+        }`}
+      >
+        <div className="header-container">
+          <div className="header-row header-row-top">
+            {/* Логотип */}
+            <div className="logo-wrapper" onClick={() => navigate('/')}>
+              <div className="logo-icon-wrap">
+                <FaLeaf className="logo-icon" />
+              </div>
+              <div className="logo-text-wrap">
+                <h1 className="logo-main">AgroBazar</h1>
+                <span className="logo-sub">АГРОБАЗАР МАРКЕТИНГС</span>
+              </div>
             </div>
-            <div className="logo-text-wrap">
-              <h1 className="logo-main">AgroBazar</h1>
-              <span className="logo-sub">АЙЫЛ ЧАРБА МАРКЕТПЛЕЙС</span>
-            </div>
-          </div>
 
-          <div className="search-wrapper">
-            <div className="search-box">
-              <FaSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Товар, фермер, регион..."
-                className="search-input"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <button className="search-clear" onClick={() => setSearchTerm('')}>
-                  <FaTimes />
+            {/* Search - Ортодо */}
+            <div className="search-wrapper">
+              <div className="search-box">
+                <FaSearch className="search-icon" />
+                <input
+                  type="text"
+                  placeholder="Товар, фермер, регион..."
+                  className="search-input"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button className="search-clear" onClick={() => setSearchTerm('')}>
+                    <FaTimes />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Оң жак - Тил, Тема жана Добавить/Акаунт/Выйти */}
+            <div className="top-actions">
+              <div className="lang-wrapper" ref={langMenuRef}>
+                <button
+                  className="lang-btn"
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                >
+                  <FaGlobe />
+                  <span className="lang-label">{getCurrentLangLabel()}</span>
                 </button>
-              )}
-            </div>
-          </div>
+                {showLangMenu && (
+                  <div className="lang-dropdown">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        className={`lang-option ${
+                          language === lang.code ? 'active' : ''
+                        }`}
+                        onClick={() => handleLanguageChange(lang.code)}
+                      >
+                        <span className="lang-flag">{lang.flag}</span>
+                        <span>{lang.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-          <div className="top-actions">
-            <div className="lang-wrapper" ref={langMenuRef}>
               <button
-                className="lang-btn"
-                onClick={() => setShowLangMenu(!showLangMenu)}
+                className="theme-btn"
+                onClick={() => setIsDark(!isDark)}
+                aria-label="Тема"
               >
-                <FaGlobe />
-                <span className="lang-label">{getCurrentLangLabel()}</span>
+                {isDark ? <FaSun /> : <FaMoon />}
               </button>
-              {showLangMenu && (
-                <div className="lang-dropdown">
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      className={`lang-option ${
-                        language === lang.code ? 'active' : ''
-                      }`}
-                      onClick={() => handleLanguageChange(lang.code)}
-                    >
-                      <span className="lang-flag">{lang.flag}</span>
-                      <span>{lang.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
 
-            <button
-              className="theme-btn"
-              onClick={() => setIsDark(!isDark)}
-              aria-label="Тема"
-            >
-              {isDark ? <FaSun /> : <FaMoon />}
-            </button>
-
-            <button
-              className="mobile-toggle"
-              onClick={() => setShowMobileMenu(!showMobileMenu)}
-              aria-label="Меню"
-            >
-              {showMobileMenu ? <FaTimes /> : <FaBars />}
-            </button>
-          </div>
-        </div>
-
-        <div className="header-row header-row-bottom">
-          <div className="nav-wrapper">
-            <div className="nav-left">
-              {topNavItems.map((item, index) => (
-                <button
-                  key={index}
-                  className={`nav-btn ${item.isNotif ? 'notif-btn' : ''}`}
-                  onClick={() => {
-                    if (item.isNotif) {
-                      setShowNotifications(!showNotifications);
-                    } else {
-                      navigate(item.path);
-                    }
-                  }}
-                  aria-label={item.label}
-                >
-                  <item.icon />
-                  <span>{item.label}</span>
-                  {item.badge > 0 && (
-                    <span className="nav-badge">{item.badge}</span>
-                  )}
-                </button>
-              ))}
-            </div>
-
-            <div className="nav-center">
-              {bottomNavItems.map((item, index) => (
-                <button
-                  key={index}
-                  className="nav-btn"
-                  onClick={() => navigate(item.path)}
-                >
-                  <item.icon />
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className="nav-right">
+              {/* Добавить, Акаунт, Выйти - оң жакта */}
               {currentUser ? (
                 <>
                   <button
@@ -317,162 +289,224 @@ export default function Header() {
                   </button>
                 </>
               )}
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {showNotifications && (
-        <div className="notifications-dropdown" ref={notifRef}>
-          <div className="notif-header">
-            <h3>
-              <FaBell /> Уведомления
-            </h3>
-            {unreadNotifications.length > 0 && (
               <button
-                className="mark-read-btn"
-                onClick={() =>
-                  setNotifications(
-                    notifications.map((n) => ({ ...n, read: true }))
-                  )
-                }
+                className="mobile-toggle"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                aria-label="Меню"
               >
-                Прочитать все
+                {showMobileMenu ? <FaTimes /> : <FaBars />}
               </button>
-            )}
-          </div>
-          {notifications.length === 0 ? (
-            <div className="empty-notif">
-              <FaBell className="empty-icon" />
-              <p>Нет уведомлений</p>
             </div>
-          ) : (
-            notifications.map((notif) => (
-              <div
-                key={notif.id}
-                className={`notif-item ${notif.read ? 'read' : 'unread'}`}
-                onClick={() =>
-                  setNotifications(
-                    notifications.map((n) =>
-                      n.id === notif.id ? { ...n, read: true } : n
-                    )
-                  )
-                }
-              >
-                <div className="notif-message">{notif.message}</div>
-                <div className="notif-time">{getTimeAgo(notif.createdAt)}</div>
-              </div>
-            ))
-          )}
-        </div>
-      )}
+          </div>
 
-      {showMobileMenu && (
-        <div className="mobile-menu" ref={mobileMenuRef}>
-          <div className="mobile-menu-header">
-            {currentUser ? (
-              <div className="mobile-user-info">
-                <div className="mobile-user-avatar">
-                  {currentUser.fullName?.charAt(0) || 'U'}
-                </div>
-                <div>
-                  <div className="mobile-user-name">{currentUser.fullName}</div>
-                  <div className="mobile-user-email">{currentUser.email}</div>
-                </div>
+          <div className="header-row header-row-bottom">
+            <div className="nav-wrapper">
+              {/* Сол жак - бош (эч нерсе жок) */}
+              <div className="nav-left"></div>
+
+              {/* Орто - Навигация (Избранное, Корзина, Уведомления, Рейтинг, Статистика, Заказы, Чат, Карта, Скидки) */}
+              <div className="nav-center">
+                {topNavItems.map((item, index) => (
+                  <button
+                    key={index}
+                    className={`nav-btn ${item.isNotif ? 'notif-btn' : ''}`}
+                    onClick={() => {
+                      if (item.isNotif) {
+                        setShowNotifications(!showNotifications);
+                      } else {
+                        navigate(item.path);
+                      }
+                    }}
+                    aria-label={item.label}
+                  >
+                    <item.icon />
+                    <span>{item.label}</span>
+                    {item.badge > 0 && (
+                      <span className="nav-badge">{item.badge}</span>
+                    )}
+                  </button>
+                ))}
+                {bottomNavItems.map((item, index) => (
+                  <button
+                    key={`bottom-${index}`}
+                    className="nav-btn"
+                    onClick={() => navigate(item.path)}
+                  >
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Оң жак - бош */}
+              <div className="nav-right"></div>
+            </div>
+          </div>
+        </div>
+
+        {showNotifications && (
+          <div className="notifications-dropdown" ref={notifRef}>
+            <div className="notif-header">
+              <h3>
+                <FaBell /> Уведомления
+              </h3>
+              {unreadNotifications.length > 0 && (
+                <button
+                  className="mark-read-btn"
+                  onClick={() =>
+                    setNotifications(
+                      notifications.map((n) => ({ ...n, read: true }))
+                    )
+                  }
+                >
+                  Прочитать все
+                </button>
+              )}
+            </div>
+            {notifications.length === 0 ? (
+              <div className="empty-notif">
+                <FaBell className="empty-icon" />
+                <p>Нет уведомлений</p>
               </div>
             ) : (
-              <div className="mobile-auth-buttons">
-                <button
-                  className="mobile-login-btn"
-                  onClick={() => {
-                    setShowLogin(true);
-                    setShowMobileMenu(false);
-                  }}
+              notifications.map((notif) => (
+                <div
+                  key={notif.id}
+                  className={`notif-item ${notif.read ? 'read' : 'unread'}`}
+                  onClick={() =>
+                    setNotifications(
+                      notifications.map((n) =>
+                        n.id === notif.id ? { ...n, read: true } : n
+                      )
+                    )
+                  }
                 >
-                  <FaUser /> Войти
-                </button>
-                <button
-                  className="mobile-register-btn"
-                  onClick={() => {
-                    setShowRegister(true);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <FaLeaf /> Регистрация
-                </button>
-              </div>
+                  <div className="notif-message">{notif.message}</div>
+                  <div className="notif-time">{getTimeAgo(notif.createdAt)}</div>
+                </div>
+              ))
             )}
           </div>
+        )}
 
-          <div className="mobile-menu-body">
-            <div className="mobile-menu-section">
-              <div className="mobile-section-title">Основное</div>
-              {topNavItems.map((item, index) => (
-                <button
-                  key={index}
-                  className="mobile-nav-link"
-                  onClick={() => {
-                    if (item.isNotif) {
-                      setShowNotifications(!showNotifications);
-                    } else {
+        {showMobileMenu && (
+          <div className="mobile-menu" ref={mobileMenuRef}>
+            <div className="mobile-menu-header">
+              {currentUser ? (
+                <div className="mobile-user-info">
+                  <div className="mobile-user-avatar">
+                    {currentUser.fullName?.charAt(0) || 'U'}
+                  </div>
+                  <div>
+                    <div className="mobile-user-name">{currentUser.fullName}</div>
+                    <div className="mobile-user-email">{currentUser.email}</div>
+                  </div>
+                </div>
+              ) : (
+                <div className="mobile-auth-buttons">
+                  <button
+                    className="mobile-login-btn"
+                    onClick={() => {
+                      setShowLogin(true);
+                      setShowMobileMenu(false);
+                    }}
+                  >
+                    <FaUser /> Войти
+                  </button>
+                  <button
+                    className="mobile-register-btn"
+                    onClick={() => {
+                      setShowRegister(true);
+                      setShowMobileMenu(false);
+                    }}
+                  >
+                    <FaLeaf /> Регистрация
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="mobile-menu-body">
+              <div className="mobile-menu-section">
+                <div className="mobile-section-title">Основное</div>
+                {topNavItems.map((item, index) => (
+                  <button
+                    key={index}
+                    className="mobile-nav-link"
+                    onClick={() => {
+                      if (item.isNotif) {
+                        setShowNotifications(!showNotifications);
+                      } else {
+                        navigate(item.path);
+                      }
+                      setShowMobileMenu(false);
+                    }}
+                  >
+                    <item.icon />
+                    <span>{item.label}</span>
+                    {item.badge > 0 && (
+                      <span className="mobile-badge">{item.badge}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mobile-menu-section">
+                <div className="mobile-section-title">Навигация</div>
+                {bottomNavItems.map((item, index) => (
+                  <button
+                    key={index}
+                    className="mobile-nav-link"
+                    onClick={() => {
                       navigate(item.path);
-                    }
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <item.icon />
-                  <span>{item.label}</span>
-                  {item.badge > 0 && (
-                    <span className="mobile-badge">{item.badge}</span>
-                  )}
-                </button>
-              ))}
-            </div>
+                      setShowMobileMenu(false);
+                    }}
+                  >
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
 
-            <div className="mobile-menu-section">
-              <div className="mobile-section-title">Навигация</div>
-              {bottomNavItems.map((item, index) => (
-                <button
-                  key={index}
-                  className="mobile-nav-link"
-                  onClick={() => {
-                    navigate(item.path);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <item.icon />
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className="mobile-menu-section">
-              <div className="mobile-section-title">Действия</div>
-              {currentUser && (
-                <button
-                  className="mobile-nav-link add-mobile-btn"
-                  onClick={() => {
-                    setShowAddProduct(true);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <FaPlus />
-                  <span>Добавить товар</span>
-                </button>
-              )}
-              {currentUser && (
-                <button
-                  className="mobile-nav-link logout-mobile-btn"
-                  onClick={handleLogout}
-                >
-                  <FaSignOutAlt />
-                  <span>Выйти</span>
-                </button>
-              )}
+              <div className="mobile-menu-section">
+                <div className="mobile-section-title">Действия</div>
+                {currentUser && (
+                  <button
+                    className="mobile-nav-link add-mobile-btn"
+                    onClick={() => {
+                      setShowAddProduct(true);
+                      setShowMobileMenu(false);
+                    }}
+                  >
+                    <FaPlus />
+                    <span>Добавить товар</span>
+                  </button>
+                )}
+                {currentUser && (
+                  <button
+                    className="mobile-nav-link logout-mobile-btn"
+                    onClick={handleLogout}
+                  >
+                    <FaSignOutAlt />
+                    <span>Выйти</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </header>
+        )}
+      </header>
+
+      <button
+        className={`header-toggle-btn ${!isHeaderVisible ? 'visible' : ''}`}
+        onClick={() => setIsExpanded(!isExpanded)}
+        aria-label="Header көрсөтүү/жашыруу"
+      >
+        <FaChevronDown
+          className={`toggle-icon ${isExpanded ? 'expanded' : ''}`}
+        />
+      </button>
+    </>
   );
 }
